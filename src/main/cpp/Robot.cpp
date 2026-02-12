@@ -41,7 +41,7 @@ void Robot::RobotPeriodic() {
     auto const omega = driveState.Speeds.omega;
     m_container.m_Field2d.SetRobotPose(pose);
 
-    if (kUseLimelight) {
+    if (kUseLimelight && !frc::DriverStation::IsAutonomousEnabled()) {
         LimelightHelpers::SetRobotOrientation("limelight", heading.value(), 0, 0, 0, 0, 0);
         auto llMeasurement = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         if (llMeasurement && llMeasurement->tagCount > 0 && units::math::abs(omega) < 2_tps) {

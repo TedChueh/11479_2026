@@ -16,9 +16,12 @@ SingleMotorModule::SingleMotorModule(int motorID, Config config)
     motorConfigs.Slot0.kD = config.kD;
     motorConfigs.Voltage.PeakForwardVoltage = config.PeakVoltage;
     motorConfigs.Voltage.PeakReverseVoltage = -config.PeakVoltage;
-    motorConfigs.TorqueCurrent.PeakForwardTorqueCurrent = config.PeakCurrent;
-    motorConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -config.PeakCurrent;
+    motorConfigs.TorqueCurrent.PeakForwardTorqueCurrent      = config.PeakCurrent;
+    motorConfigs.TorqueCurrent.PeakReverseTorqueCurrent      = -config.PeakCurrent;
     motorConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = config.RampPeriod;
+    motorConfigs.MotionMagic.MotionMagicCruiseVelocity       = config.MotionMagicCruiseVelocity;
+    motorConfigs.MotionMagic.MotionMagicAcceleration         = config.MotionMagicAcceleration;
+    motorConfigs.MotionMagic.MotionMagicJerk                 = config.MotionMagicJerk;
 
   /* Retry config apply up to 5 times, report if failure */
   ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;

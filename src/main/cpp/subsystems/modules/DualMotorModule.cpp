@@ -19,6 +19,9 @@ DualMotorModule::DualMotorModule(int motorRightID, int motorLeftID, Config confi
     motorRightConfigs.TorqueCurrent.PeakForwardTorqueCurrent = config.PeakCurrent;
     motorRightConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -config.PeakCurrent;
     motorRightConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = config.RampPeriod;
+    motorRightConfigs.MotionMagic.MotionMagicCruiseVelocity       = config.MotionMagicCruiseVelocity;
+    motorRightConfigs.MotionMagic.MotionMagicAcceleration         = config.MotionMagicAcceleration;
+    motorRightConfigs.MotionMagic.MotionMagicJerk                 = config.MotionMagicJerk;
 
     motorLeftConfigs.MotorOutput.Inverted = config.motorLeftInvert;
     motorLeftConfigs.Slot0.kS = config.kS;
@@ -32,6 +35,9 @@ DualMotorModule::DualMotorModule(int motorRightID, int motorLeftID, Config confi
     motorLeftConfigs.TorqueCurrent.PeakForwardTorqueCurrent = config.PeakCurrent;
     motorLeftConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -config.PeakCurrent;
     motorLeftConfigs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = config.RampPeriod;
+    motorLeftConfigs.MotionMagic.MotionMagicCruiseVelocity       = config.MotionMagicCruiseVelocity;
+    motorLeftConfigs.MotionMagic.MotionMagicAcceleration         = config.MotionMagicAcceleration;
+    motorLeftConfigs.MotionMagic.MotionMagicJerk                 = config.MotionMagicJerk;
 
   /* Retry config apply up to 5 times, report if failure */
   ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;

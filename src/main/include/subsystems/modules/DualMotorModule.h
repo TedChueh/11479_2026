@@ -26,6 +26,9 @@ class DualMotorModule {
     voltage::volt_t   PeakVoltage = 8_V;
     current::ampere_t PeakCurrent = 40_A;
     time::second_t    RampPeriod  = 0.1_s;
+    angular_velocity::turns_per_second_t             MotionMagicCruiseVelocity = 0_tps; 
+    angular_acceleration::turns_per_second_squared_t MotionMagicAcceleration   = 0_tr_per_s_sq;
+    angular_jerk::turns_per_second_cubed_t           MotionMagicJerk           = 0_tr_per_s_cu;
   };
 
   DualMotorModule(
@@ -35,7 +38,8 @@ class DualMotorModule {
   );               
 
   static constexpr CANBus kCANBus = CANBus::RoboRIO();
-  controls::VelocityVoltage velocityControl = controls::VelocityVoltage{0_tps}.WithSlot(0);
+  controls::VelocityVoltage    velocityControl    = controls::VelocityVoltage{0_tps}.WithSlot(0);
+  controls::MotionMagicVoltage motionMagicControl = controls::MotionMagicVoltage{0_tr}.WithSlot(0);
   controls::NeutralOut brake{};
 
   hardware::TalonFX motorRight;

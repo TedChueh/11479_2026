@@ -50,6 +50,25 @@ public:
 
 private:
     void ConfigureBindings();
+    DualMotorModule::Config m_testConfig{
+    .motorRightInvert = true,
+    .motorLeftInvert  = false,
+
+    .kS = 0.25,
+    .kV = 0.101,
+    .kA = 0.0,
+    .kP = 0.0,
+    .kI = 0.0,
+    .kD = 0.0,
+
+    .PeakVoltage = 8_V,
+    .PeakCurrent = 40_A,
+    .RampPeriod  = 0.5_s,
+
+  };
+
+  DualMotorModule m_testModule{1, 2, m_testConfig};
+
     ShooterSubsystem shooter{
         51, 52,
         54,
@@ -60,7 +79,7 @@ private:
             .kS = 0.19,
             .kV = 0.111,
             .kA = 0.0,
-            .kP = 0.0,
+            .kP = 0.015,
             .kI = 0,
             .kD = 0,
             .PeakVoltage = 12_V,
@@ -72,7 +91,7 @@ private:
             .kS = 0.197,
             .kV = 0.11,
             .kA = 0.0,
-            .kP = 0.0,
+            .kP = 0.01,
             .kI = 0,
             .kD = 0,
             .PeakVoltage = 12_V,

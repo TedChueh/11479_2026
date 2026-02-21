@@ -67,10 +67,16 @@ void RobotContainer::ConfigureBindings()
         })
     );
 
+    // joystick.Y().OnTrue(
+    //     shooter.Shooting(80_tps, 20_tps, 0_tps)
+    // );
     joystick.Y().OnTrue(
-        shooter.Shooting(65_tps, 17_tps, 0_tps)
-    );
-    
+        frc2::cmd::RunOnce([this] {
+            auto req = m_testModule.velocityControl.WithVelocity(20_tps);
+            m_testModule.motorRight.SetControl(req);
+            m_testModule.motorLeft.SetControl(req);
+    }, {})
+     );
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.

@@ -54,7 +54,7 @@ void RobotContainer::ConfigureBindings()
                  getAngleFromRobotToTarget(TargetTranslation , drivetrain.GetState().Pose.Translation(),  drivetrain.GetState().Pose.Rotation()));
         })
     );
-    joystick.Y().OnTrue(drivetrain.RunOnce([this] { drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));}));
+    // joystick.Y().OnTrue(drivetrain.RunOnce([this] { drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));}));
 
     joystick.POVUp().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
@@ -66,6 +66,17 @@ void RobotContainer::ConfigureBindings()
             return forwardStraight.WithVelocityX(-0.5_mps).WithVelocityY(0_mps);
         })
     );
+
+    // joystick.Y().OnTrue(
+    //     shooter.Shooting(80_tps, 20_tps, 0_tps)
+    // );
+    joystick.Y().OnTrue(
+        frc2::cmd::RunOnce([this] {
+            auto req = m_testModule.velocityControl.WithVelocity(20_tps);
+            m_testModule.motorRight.SetControl(req);
+            m_testModule.motorLeft.SetControl(req);
+    }, {})
+     );
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.

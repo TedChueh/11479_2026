@@ -32,7 +32,7 @@ class SingleMotorModule {
 
   SingleMotorModule(
     int motorID,
-    Config config = {}
+    Config config
   );               
 
   static constexpr CANBus kCANBus = CANBus::RoboRIO();

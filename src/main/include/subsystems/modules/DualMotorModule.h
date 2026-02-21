@@ -34,7 +34,7 @@ class DualMotorModule {
   DualMotorModule(
     int motorRightID,
     int motorLeftID,
-    Config config = {}
+    Config config
   );               
 
   static constexpr CANBus kCANBus = CANBus::RoboRIO();

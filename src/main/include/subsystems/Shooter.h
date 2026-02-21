@@ -19,11 +19,10 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   ShooterSubsystem(
     int shootRightID,
     int shootLeftID,
-    int suctionRightID,
-    int suctionLeftID,
+    int suctionID,
     int conveyerID,
     DualMotorModule::Config shootConfig,
-    DualMotorModule::Config suctionConfig,
+    SingleMotorModule::Config suctionConfig,
     SingleMotorModule::Config conveyerConfig
   );
 
@@ -50,6 +49,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
  private:
   DualMotorModule shootModule;
-  DualMotorModule suctionModule;
+  SingleMotorModule suctionModule;
   SingleMotorModule conveyerModule;
 };

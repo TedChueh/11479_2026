@@ -8,12 +8,12 @@ using namespace units::angular_velocity;
 
 ShooterSubsystem::ShooterSubsystem(
   int shootRightID,   int shootLeftID, 
-  int suctionRightID, int suctionLeftID,
+  int suctionID,
   int conveyerID,
   DualMotorModule::Config shootConfig,
-  DualMotorModule::Config suctionConfig,
+  SingleMotorModule::Config suctionConfig,
   SingleMotorModule::Config conveyerConfig
-): shootModule{shootRightID, shootLeftID, shootConfig}, suctionModule{suctionRightID, suctionLeftID, suctionConfig}, conveyerModule{conveyerID, conveyerConfig} {}
+): shootModule{shootRightID, shootLeftID, shootConfig}, suctionModule{suctionID, suctionConfig}, conveyerModule{conveyerID, conveyerConfig} {}
 
 frc2::CommandPtr ShooterSubsystem::Shooting(turns_per_second_t shootTps, turns_per_second_t suctionTps, turns_per_second_t conveyerTps) {
   return frc2::cmd::Sequence(
@@ -33,14 +33,14 @@ frc2::CommandPtr ShooterSubsystem::Stop() {
   );
 }
 
+
 void ShooterSubsystem::ActivateShooter(turns_per_second_t tps) {
   shootModule.motorLeft.SetControl(shootModule.velocityControl.WithVelocity(tps));
   shootModule.motorRight.SetControl(shootModule.velocityControl.WithVelocity(tps));
 }
 
 void ShooterSubsystem::ActivateSuction(turns_per_second_t tps) {
-  suctionModule.motorLeft.SetControl(suctionModule.velocityControl.WithVelocity(tps));
-  suctionModule.motorRight.SetControl(suctionModule.velocityControl.WithVelocity(tps));
+  suctionModule.motor.SetControl(suctionModule.velocityControl.WithVelocity(tps));
 }
 
 void ShooterSubsystem::ActivateConveyer(turns_per_second_t tps) {
@@ -53,8 +53,7 @@ void ShooterSubsystem::DeactivateShooter() {
 }
 
 void ShooterSubsystem::DeactivateSuction() {
-  suctionModule.motorLeft.SetControl(controls::NeutralOut{});
-  suctionModule.motorRight.SetControl(controls::NeutralOut{});
+  suctionModule.motor.SetControl(controls::NeutralOut{});
 }
 
 void ShooterSubsystem::DeactivateConveyer() {

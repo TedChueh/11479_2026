@@ -33,6 +33,9 @@ void RobotContainer::ConfigureBindings()
         })
     );
 
+    shooter.SetDefaultCommand(shooter.Stop());
+    intake.SetDefaultCommand(intake.Stop());
+    
     // Idle while the robot is disabled. This ensures the configured
     // neutral mode is applied to the drive motors while disabled.
     frc2::RobotModeTriggers::Disabled().WhileTrue(
@@ -40,12 +43,7 @@ void RobotContainer::ConfigureBindings()
             return swerve::requests::Idle{};
         }).IgnoringDisable(true)
     );
-
-    joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
-    joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
-        return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
-    }));
-
+    
     joystick.X().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
             return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
@@ -54,34 +52,50 @@ void RobotContainer::ConfigureBindings()
                  getAngleFromRobotToTarget(TargetTranslation , drivetrain.GetState().Pose.Translation(),  drivetrain.GetState().Pose.Rotation()));
         })
     );
-    // joystick.Y().OnTrue(drivetrain.RunOnce([this] { drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));}));
+    joystick.B().OnTrue(drivetrain.RunOnce([this] { drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));}));
 
-    joystick.POVUp().WhileTrue(
-        drivetrain.ApplyRequest([this]() -> auto&& {
-            return forwardStraight.WithVelocityX(0.5_mps).WithVelocityY(0_mps);
-        })
+    joystick.Y().WhileTrue(
+        shooter.Shooting(
+            [] { return 60_tps; }, 
+            [] { return 20_tps; }, 
+            [] { return 0_tps;  }
+        ) 
     );
-    joystick.POVDown().WhileTrue(
-        drivetrain.ApplyRequest([this]() -> auto&& {
-            return forwardStraight.WithVelocityX(-0.5_mps).WithVelocityY(0_mps);
-        })
+    
+    joystick.A().WhileTrue(
+        intake.Intaking(
+            [] { return 30_tps; }
+        )
     );
 
-    // 利用lamda return 參數 可以讓馬達轉速可以時時被調整而不是當 command 被 schedule 瞬間 讀一次初始值
-    // joystick.Y().OnTrue(
-    //     shooter.Shooting([this] { return 80_tps; }, 
-    //                      [this] { return 20_tps; }, 
-    //                      [this] { return 0_tps;  }
-    //     ) 
+    joystick.POVUp().OnTrue(
+        intake.Lifting(10_tr)
+    );
+
+    // joystick.A().OnTrue(
+    //     frc2::cmd::RunOnce([this] {
+    //         auto req = m_testModule.velocityControl.WithVelocity(20_tps);
+    //         m_testModule.motorRight.SetControl(req);
+    //         m_testModule.motorLeft.SetControl(req);
+    // }, {})
     // );
 
-    joystick.Y().OnTrue(
-        frc2::cmd::RunOnce([this] {
-            auto req = m_testModule.velocityControl.WithVelocity(20_tps);
-            m_testModule.motorRight.SetControl(req);
-            m_testModule.motorLeft.SetControl(req);
-    }, {})
-     );
+    // joystick.POVUp().WhileTrue(
+    //     drivetrain.ApplyRequest([this]() -> auto&& {
+    //         return forwardStraight.WithVelocityX(0.5_mps).WithVelocityY(0_mps);
+    //     })
+    // );
+    // joystick.POVDown().WhileTrue(
+    //     drivetrain.ApplyRequest([this]() -> auto&& {
+    //         return forwardStraight.WithVelocityX(-0.5_mps).WithVelocityY(0_mps);
+    //     })
+    // );
+
+
+    //joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
+    // joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
+    //     return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
+    // }));
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.

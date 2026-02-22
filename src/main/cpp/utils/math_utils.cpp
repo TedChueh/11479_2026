@@ -20,3 +20,20 @@ double getDistanceFromRobotToTarget(Translation2d target, Translation2d referenc
     Translation2d distanceTranslation(units::meter_t((target - reference).X()),units::meter_t((target - reference).Y()));
     return distanceTranslation.Distance(Translation2d(0_m,0_m)).value();
 }
+
+TPS getTPSFromDistance(double distance, double y_intercept, double slope) {
+    double raw_tps = slope * distance + y_intercept;
+    double tps =  raw_tps;
+
+    if (tps < 0) {
+        frc::SmartDashboard::PutString("Shooter TPS Warning⚠️: ", "TPS < 0");
+        tps = 0;
+    }
+    else if (tps > 100) {
+        frc::SmartDashboard::PutString("Shooter TPS Warning⚠️: ", "TPS > 100");
+        tps = 100;
+    }
+    frc::SmartDashboard::PutNumber("Shooter Raw TPS: ", raw_tps);
+    frc::SmartDashboard::PutNumber("Shooter TPS: ", tps);
+    return TPS{tps};
+}

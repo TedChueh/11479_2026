@@ -10,6 +10,8 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "subsystems/Shooter.h"
+#include "subsystems/Intake.h"
+
 #include "Telemetry.h"
 
 class RobotContainer {
@@ -50,24 +52,37 @@ public:
 
 private:
     void ConfigureBindings();
-    DualMotorModule::Config m_testConfig{
-    .motorRightInvert = true,
-    .motorLeftInvert  = false,
 
-    .kS = 0.25,
-    .kV = 0.101,
-    .kA = 0.0,
-    .kP = 0.0,
-    .kI = 0.0,
-    .kD = 0.0,
-
-    .PeakVoltage = 8_V,
-    .PeakCurrent = 40_A,
-    .RampPeriod  = 0.5_s,
-
-  };
-
-  DualMotorModule m_testModule{1, 2, m_testConfig};
+    IntakeSubsystem intake{
+        1, 2,
+        61, 62,
+        DualMotorModule::Config{
+            .motorRightInvert = true,
+            .motorLeftInvert = false,
+            .kS = 0.25,
+            .kV = 0.101,
+            .kA = 0.0,
+            .kP = 0.0,
+            .kI = 0,
+            .kD = 0,
+            .PeakVoltage = 12_V,
+            .PeakCurrent = 40_A,
+            .RampPeriod = 0.5_s
+        },
+        DualMotorModule::Config{
+            .motorRightInvert = true,
+            .motorLeftInvert = false,
+            .kS = 0.195,
+            .kV = 0.108,
+            .kA = 0.0,
+            .kP = 0.0,
+            .kI = 0,
+            .kD = 0,
+            .PeakVoltage = 12_V,
+            .PeakCurrent = 40_A,
+            .RampPeriod = 0.5_s
+        }
+    };
 
     ShooterSubsystem shooter{
         51, 52,
@@ -111,4 +126,23 @@ private:
             .RampPeriod = 0.1_s
         }
     };
+
+    // DualMotorModule::Config m_testConfig{
+    // .motorRightInvert = true,
+    // .motorLeftInvert  = false,
+
+    // .kS = 0.25,
+    // .kV = 0.101,
+    // .kA = 0.0,
+    // .kP = 0.0,
+    // .kI = 0.0,
+    // .kD = 0.0,
+
+    // .PeakVoltage = 8_V,
+    // .PeakCurrent = 40_A,
+    // .RampPeriod  = 0.5_s,
+
+    // };
+
+    // DualMotorModule m_testModule{1, 2, m_testConfig};
 };

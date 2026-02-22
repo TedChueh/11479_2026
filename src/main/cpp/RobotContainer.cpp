@@ -52,6 +52,7 @@ void RobotContainer::ConfigureBindings()
                  getAngleFromRobotToTarget(TargetTranslation , drivetrain.GetState().Pose.Translation(),  drivetrain.GetState().Pose.Rotation()));
         })
     );
+
     joystick.B().OnTrue(drivetrain.RunOnce([this] { drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));}));
 
     joystick.Y().WhileTrue(
@@ -92,7 +93,7 @@ void RobotContainer::ConfigureBindings()
     // );
 
 
-    //joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
+    // joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
     // joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
     //     return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
     // }));

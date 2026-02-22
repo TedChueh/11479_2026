@@ -6,10 +6,10 @@
 
 IntakeSubsystem::IntakeSubsystem(
     int intakeRightID, int intakeLeftID,
-    int intakeRightArmID, int intakeLeftArmID,
+    int armRightID, int armLeftID,
     DualMotorModule::Config intakeConfig,
-    DualMotorModule::Config liftConfig
-): intakeModule{intakeRightID, intakeLeftID, intakeConfig}, liftModule{intakeRightArmID, intakeLeftArmID, liftConfig} {}
+    DualMotorModule::Config armConfig
+): intakeModule{intakeRightID, intakeLeftID, intakeConfig}, armModule{armRightID, armLeftID, armConfig} {}
 
 frc2::CommandPtr IntakeSubsystem::Intaking(std::function<TPS()> intakeTps) {
   return frc2::cmd::Run(
@@ -19,16 +19,16 @@ frc2::CommandPtr IntakeSubsystem::Intaking(std::function<TPS()> intakeTps) {
     );
 }
 
+frc2::CommandPtr IntakeSubsystem::Lifting(Turn turns) {
+  return frc2::cmd::RunOnce([this, turns] {
+      LiftByTurns(turns);
+    }, {this});
+}
+
 frc2::CommandPtr IntakeSubsystem::Stop() {
   return frc2::cmd::Run([this] {
     DeactivateIntake();
   }, {this});
-}
-
-frc2::CommandPtr IntakeSubsystem::Lifting(Turn Turns) {
-  return frc2::cmd::RunOnce([this, Turns] {
-      LiftByTurns(Turns);
-    }, {this});
 }
 
 void IntakeSubsystem::ActivateIntake(TPS tps) {
@@ -41,13 +41,13 @@ void IntakeSubsystem::DeactivateIntake() {
   intakeModule.motorRight.SetControl(controls::NeutralOut{});
 }
 
-void IntakeSubsystem::LiftByTurns(Turn Turns) {
-  auto leftPos  = liftModule.motorLeft.GetPosition().GetValue();
-  auto rightPos = liftModule.motorRight.GetPosition().GetValue();
+void IntakeSubsystem::LiftByTurns(Turn turns) {
+  auto leftPos  = armModule.motorLeft.GetPosition().GetValue();
+  auto rightPos = armModule.motorRight.GetPosition().GetValue();
 
-  Turn leftTarget  = leftPos  + Turns;
-  Turn rightTarget = rightPos + Turns;
+  Turn leftTarget  = leftPos  + turns;
+  Turn rightTarget = rightPos + turns;
 
-  liftModule.motorLeft.SetControl(liftModule.motionMagicControl.WithPosition(leftTarget));
-  liftModule.motorRight.SetControl(liftModule.motionMagicControl.WithPosition(rightTarget));
+  armModule.motorLeft.SetControl(armModule.motionMagicControl.WithPosition(leftTarget));
+  armModule.motorRight.SetControl(armModule.motionMagicControl.WithPosition(rightTarget));
 }

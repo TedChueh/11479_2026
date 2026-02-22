@@ -19,21 +19,24 @@ using Turn = units::turn_t;
 class IntakeSubsystem : public frc2::SubsystemBase {
     public:
         IntakeSubsystem(
-            int intakeRightID, int intakeLeftID, int intakeRightArmID, int intakeLeftArmID,
+            int intakeRightID, 
+            int intakeLeftID, 
+            int armRightID, 
+            int armLeftID,
             DualMotorModule::Config intakeConfig,
-            DualMotorModule::Config liftConfig
+            DualMotorModule::Config armConfig
         );
 
         frc2::CommandPtr Intaking(std::function<TPS()> intakeTps);
+        frc2::CommandPtr Lifting(Turn turns);
         frc2::CommandPtr Stop();
-        frc2::CommandPtr Lifting(Turn Turns);
 
         void ActivateIntake(TPS tps);
         void DeactivateIntake();
 
-        void LiftByTurns(Turn Turns);
+        void LiftByTurns(Turn turns);
 
     private:
         DualMotorModule intakeModule;
-        DualMotorModule liftModule;
+        DualMotorModule armModule;
 };

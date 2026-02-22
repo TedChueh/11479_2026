@@ -36,6 +36,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void ActivateSuction(TPS tps);
   
   void ActivateConveyer(TPS tps);
+  
   void DeactivateShooter();
   
   void DeactivateSuction();

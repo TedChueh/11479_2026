@@ -33,7 +33,6 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
         void ActivateIntake(TPS tps);
         void DeactivateIntake();
-
         void LiftByTurns(Turn turns);
 
     private:

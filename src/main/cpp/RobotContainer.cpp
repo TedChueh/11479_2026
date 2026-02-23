@@ -14,11 +14,7 @@
 RobotContainer::RobotContainer()
 {
 
-    pathplanner::NamedCommands::registerCommand(
-    "Shooting",
-    shooter.Shooting(
-        [] { return 60_tps; }).WithTimeout(4_s)   
-    );
+    pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(4_s));
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
     frc::Shuffleboard::GetTab("Field").Add("Field", m_Field2d).WithSize(6, 4);
@@ -61,21 +57,11 @@ void RobotContainer::ConfigureBindings()
 
     joystick.B().OnTrue(drivetrain.RunOnce([this] { drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));}));
 
-    joystick.Y().WhileTrue(
-        shooter.Shooting(
-            [] { return 60_tps; }
-        ) 
-    );
+    joystick.Y().WhileTrue(shooter.Shooting([] { return 60_tps; }));
     
-    joystick.A().ToggleOnTrue(
-        intake.Intaking(
-            [] { return 30_tps; }
-        )
-    );
+    joystick.A().ToggleOnTrue(intake.Intaking([] { return 30_tps; }));
 
-    joystick.POVUp().OnTrue(
-        intake.Lifting(20_tr)
-    );
+    joystick.POVUp().OnTrue(intake.Lifting(20_tr));
 
 
 

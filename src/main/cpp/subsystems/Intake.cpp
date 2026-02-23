@@ -16,19 +16,23 @@ frc2::CommandPtr IntakeSubsystem::Intaking(std::function<TPS()> intakeTps) {
       [this, intakeTps] {
         ActivateIntake(intakeTps());
       },{this}
-    );
+  );
 }
 
 frc2::CommandPtr IntakeSubsystem::Lifting(Turn turns) {
-  return frc2::cmd::RunOnce([this, turns] {
-      LiftByTurns(turns);
-    }, {this});
+  return frc2::cmd::RunOnce(
+      [this, turns] {
+        LiftByTurns(turns);
+      },{this}
+  );
 }
 
 frc2::CommandPtr IntakeSubsystem::Stop() {
-  return frc2::cmd::Run([this] {
-    DeactivateIntake();
-  }, {this});
+  return frc2::cmd::Run(
+      [this] {
+        DeactivateIntake();
+      },{this}
+  );
 }
 
 void IntakeSubsystem::ActivateIntake(TPS tps) {

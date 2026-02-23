@@ -32,6 +32,9 @@ TPS getTPSFromDistance(double distance, double y_intercept, double slope) {
     else if (tps > 100) {
         frc::SmartDashboard::PutString("Shooter TPS Warning⚠️: ", "TPS > 100");
         tps = 100;
+    } 
+    else {
+        frc::SmartDashboard::PutString("Shooter TPS Warning⚠️: ", "TPS within bounds");
     }
     frc::SmartDashboard::PutNumber("Shooter Raw TPS: ", raw_tps);
     frc::SmartDashboard::PutNumber("Shooter TPS: ", tps);

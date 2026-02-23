@@ -16,23 +16,28 @@ ShooterSubsystem::ShooterSubsystem(
 frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps) {
   return frc2::cmd::Run(
       [this, shootTps] {
-        ActivateShooter(shootTps());
-        std::function<TPS()> deltaTps = [shootTps] {
-          if(shootTps() > 20_tps) {
-            return 20_tps;
+          TPS currentTps = shootTps();
+
+          if (currentTps < 20_tps) {
+              ActivateShooter(0_tps);
+              ActivateSuction(0_tps);
+              ActivateConveyer(0_tps);
+
+              frc::SmartDashboard::PutString("Shooter Alert", "RPM too low, stopping operation");
           } else {
-            return 0_tps;
+              ActivateShooter(currentTps);  
+              if (m_timer.HasElapsed(0.5_s)) {
+                  ActivateSuction(20_tps);
+                  ActivateConveyer(20_tps);
+              }
+
+              frc::SmartDashboard::PutString("Shooter Alert", "");
           }
-        };
-        if(m_timer.HasElapsed(0.5_s)) {
-          ActivateSuction(deltaTps());
-          ActivateConveyer(0_tps);
-        }
       },{this}
-    ).BeforeStarting(
+  ).BeforeStarting(
       [this] {
-        m_timer.Reset();
-        m_timer.Start();
+          m_timer.Reset();
+          m_timer.Start();
       }
   );
 }

@@ -27,7 +27,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
     SingleMotorModule::Config conveyerConfig
   );
 
-  frc2::CommandPtr Shooting(std::function<TPS()> shootTps, std::function<TPS()> suctionTps, std::function<TPS()> conveyerTps);
+  frc2::CommandPtr Shooting(std::function<TPS()> shootTps);
 
   frc2::CommandPtr Stop();
 

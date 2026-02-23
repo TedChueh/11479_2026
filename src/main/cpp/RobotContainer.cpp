@@ -57,9 +57,7 @@ void RobotContainer::ConfigureBindings()
 
     joystick.Y().WhileTrue(
         shooter.Shooting(
-            [] { return 60_tps; }, 
-            [] { return 20_tps; }, 
-            [] { return 0_tps;  }
+            [] { return 60_tps; }
         ) 
     );
     

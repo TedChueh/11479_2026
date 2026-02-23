@@ -13,13 +13,20 @@ ShooterSubsystem::ShooterSubsystem(
   SingleMotorModule::Config conveyerConfig
 ): shootModule{shootRightID, shootLeftID, shootConfig}, suctionModule{suctionID, suctionConfig}, conveyerModule{conveyerID, conveyerConfig} {}
 
-frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps, std::function<TPS()> suctionTps, std::function<TPS()> conveyerTps) {
+frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps) {
   return frc2::cmd::Run(
-      [this, shootTps, suctionTps, conveyerTps] {
+      [this, shootTps] {
         ActivateShooter(shootTps());
+        std::function<TPS()> deltaTps = [shootTps] {
+          if(shootTps() > 20_tps) {
+            return 20_tps;
+          } else {
+            return 0_tps;
+          }
+        };
         if(m_timer.HasElapsed(0.5_s)) {
-          ActivateSuction(suctionTps());
-          ActivateConveyer(conveyerTps());
+          ActivateSuction(deltaTps());
+          ActivateConveyer(deltaTps());
         }
       },{this}
     ).BeforeStarting(

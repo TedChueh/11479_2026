@@ -11,12 +11,18 @@
 #include <frc2/command/button/RobotModeTriggers.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 
-
 RobotContainer::RobotContainer()
 {
+
+    pathplanner::NamedCommands::registerCommand(
+    "Shooting",
+    shooter.Shooting(
+        [] { return 60_tps; }).WithTimeout(4_s)   
+    );
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
     frc::Shuffleboard::GetTab("Field").Add("Field", m_Field2d).WithSize(6, 4);
+
     ConfigureBindings();
 }
 
@@ -35,7 +41,7 @@ void RobotContainer::ConfigureBindings()
 
     shooter.SetDefaultCommand(shooter.Stop());
     intake.SetDefaultCommand(intake.Stop());
-    
+
     // Idle while the robot is disabled. This ensures the configured
     // neutral mode is applied to the drive motors while disabled.
     frc2::RobotModeTriggers::Disabled().WhileTrue(
@@ -57,21 +63,25 @@ void RobotContainer::ConfigureBindings()
 
     joystick.Y().WhileTrue(
         shooter.Shooting(
-            [] { return 60_tps; }, 
-            [] { return 20_tps; }, 
-            [] { return 0_tps;  }
+            [] { return 60_tps; }
         ) 
     );
     
-    joystick.A().WhileTrue(
+    joystick.A().ToggleOnTrue(
         intake.Intaking(
             [] { return 30_tps; }
         )
     );
 
     joystick.POVUp().OnTrue(
-        intake.Lifting(10_tr)
+        intake.Lifting(20_tr)
     );
+
+
+
+
+
+    //testing bindings below
 
     // joystick.A().OnTrue(
     //     frc2::cmd::RunOnce([this] {

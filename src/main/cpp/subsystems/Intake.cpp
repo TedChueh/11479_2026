@@ -45,9 +45,10 @@ void IntakeSubsystem::LiftByTurns(Turn turns) {
   auto leftPos  = armModule.motorLeft.GetPosition().GetValue();
   auto rightPos = armModule.motorRight.GetPosition().GetValue();
 
-  Turn leftTarget  = leftPos  + turns;
-  Turn rightTarget = rightPos + turns;
+  Turn leftTarget  = leftPos  - turns;
+  Turn rightTarget = rightPos - turns;
 
-  armModule.motorLeft.SetControl(armModule.motionMagicControl.WithPosition(leftTarget));
-  armModule.motorRight.SetControl(armModule.motionMagicControl.WithPosition(rightTarget));
+  auto s1 = armModule.motorLeft.SetControl(armModule.motionMagicControl.WithPosition(leftTarget));
+  auto s2 = armModule.motorRight.SetControl(armModule.motionMagicControl.WithPosition(rightTarget));
+  fmt::print("pressed  s1={}  s2={}\n", s1.GetName(), s2.GetName());
 }

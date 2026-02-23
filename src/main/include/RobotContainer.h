@@ -11,6 +11,7 @@
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
+#include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "Telemetry.h"
 
@@ -75,12 +76,14 @@ private:
             .kS = 0.195,
             .kV = 0.108,
             .kA = 0.0,
-            .kP = 0.0,
+            .kP = 0.5,
             .kI = 0,
             .kD = 0,
             .PeakVoltage = 12_V,
             .PeakCurrent = 40_A,
-            .RampPeriod = 0.5_s
+            .RampPeriod = 0.5_s,
+            .MotionMagicCruiseVelocity = 20_tps,
+            .MotionMagicAcceleration   = 20_tr_per_s_sq
         }
     };
 

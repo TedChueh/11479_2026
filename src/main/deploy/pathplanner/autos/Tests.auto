@@ -9,6 +9,12 @@
           "data": {
             "pathName": "Simple"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
         }
       ]
     }

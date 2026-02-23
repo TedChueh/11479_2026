@@ -26,7 +26,7 @@ frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps) {
         };
         if(m_timer.HasElapsed(0.5_s)) {
           ActivateSuction(deltaTps());
-          ActivateConveyer(deltaTps());
+          ActivateConveyer(0_tps);
         }
       },{this}
     ).BeforeStarting(

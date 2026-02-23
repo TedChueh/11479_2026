@@ -35,7 +35,8 @@ void RobotContainer::ConfigureBindings()
 
     shooter.SetDefaultCommand(shooter.Stop());
     intake.SetDefaultCommand(intake.Stop());
-    
+
+
     // Idle while the robot is disabled. This ensures the configured
     // neutral mode is applied to the drive motors while disabled.
     frc2::RobotModeTriggers::Disabled().WhileTrue(
@@ -61,14 +62,14 @@ void RobotContainer::ConfigureBindings()
         ) 
     );
     
-    joystick.A().WhileTrue(
+    joystick.POVUp().WhileTrue(
         intake.Intaking(
             [] { return 30_tps; }
         )
     );
 
-    joystick.POVUp().OnTrue(
-        intake.Lifting(10_tr)
+    joystick.A().OnTrue(
+        intake.Lifting(20_tr)
     );
 
     // joystick.A().OnTrue(

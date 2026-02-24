@@ -23,60 +23,76 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings()
 {
-    // Note that X is defined as forward according to WPILib convention,
-    // and Y is defined as to the left according to WPILib convention.
+    // Subsystem Default Command
     drivetrain.SetDefaultCommand(
-        // Drivetrain will execute this command periodically
         drivetrain.ApplyRequest([this]() -> auto&& {
             return FieldCentric_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) // Drive left with negative X (left)
-                .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
+                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed)                            // Drive left with negative X (left)
+                .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate);               // Drive counterclockwise with negative X (left)
         })
     );
+    shooter.SetDefaultCommand(
+        shooter.Stop()
+    );
+    intake.SetDefaultCommand(
+        intake.Stop()
+    );
 
-    shooter.SetDefaultCommand(shooter.Stop());
-    intake.SetDefaultCommand(intake.Stop());
-
-    // Idle while the robot is disabled. This ensures the configured
-    // neutral mode is applied to the drive motors while disabled.
+    // Disable Mode Trigger
     frc2::RobotModeTriggers::Disabled().WhileTrue(
         drivetrain.ApplyRequest([] {
             return swerve::requests::Idle{};
         }).IgnoringDisable(true)
     );
+
+    // Teleop Mode Trigger
+    frc2::RobotModeTriggers::Teleop().OnTrue(
+        intake.Lifting(20_tr)
+    );
+    frc2::RobotModeTriggers::Teleop().OnFalse(
+        intake.Stop()
+    );
     
+    // Joystick Binding
     joystick.X().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
-            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) // Drive left with negative X (left)
+            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) 
+                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) 
                 .WithTargetDirection(drivetrain.GetState().Pose.Rotation() + 
                  getAngleFromRobotToTarget(TargetTranslation , drivetrain.GetState().Pose.Translation(),  drivetrain.GetState().Pose.Rotation()));
         })
     );
+    joystick.A().ToggleOnTrue(
+        intake.Intaking([] { 
+            return 30_tps; 
+        })
+    );
+    joystick.B().OnTrue(
+        drivetrain.RunOnce([this] { 
+            drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));
+        })
+    );
+    joystick.Y().WhileTrue(
+        shooter.Shooting([] { 
+            return 60_tps; 
+        })
+    );
+    joystick.POVUp().OnTrue(
+        intake.Lifting(20_tr)
+    );
+    joystick.RightTrigger().WhileTrue(
+        shooter.Shooting([] { 
+            return 60_tps; 
+        })
+    );
+    joystick.LeftBumper().OnTrue(
+        drivetrain.RunOnce([this] { 
+            drivetrain.SeedFieldCentric(); 
+        })
+    ); // reset the field-centric heading on left bumper press
 
-    joystick.B().OnTrue(drivetrain.RunOnce([this] { drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));}));
-
-    joystick.Y().WhileTrue(shooter.Shooting([] { return 60_tps; }));
-    
-    joystick.A().ToggleOnTrue(intake.Intaking([] { return 30_tps; }));
-
-    joystick.POVUp().OnTrue(intake.Lifting(20_tr));
-
-    joystick.RightTrigger().WhileTrue(shooter.Shooting([] { return 60_tps; }));
-
-    // reset the field-centric heading on left bumper press
-    joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
-    
+    // Register Telemetry
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
-
-    frc2::RobotModeTriggers::Teleop().OnTrue(
-      intake.Lifting(20_tr)   
-    );
-
-    frc2::RobotModeTriggers::Teleop().OnFalse(
-      intake.Stop()
-    );
-
 }
 
 void RobotContainer::TestBindings(){

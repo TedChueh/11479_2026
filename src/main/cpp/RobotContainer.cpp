@@ -13,7 +13,6 @@
 
 RobotContainer::RobotContainer()
 {
-
     pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(4_s));
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
@@ -63,17 +62,21 @@ void RobotContainer::ConfigureBindings()
 
     joystick.POVUp().OnTrue(intake.Lifting(20_tr));
 
-
-
-
-
-    //testing bindings below
-
+    joystick.RightTrigger().WhileTrue(shooter.Shooting([] { return 60_tps; }));
 
     // reset the field-centric heading on left bumper press
     joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
-
+    
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
+
+    frc2::RobotModeTriggers::Teleop().OnTrue(
+      intake.Lifting(20_tr)   
+    );
+
+    frc2::RobotModeTriggers::Teleop().OnFalse(
+      intake.Stop()
+    );
+
 }
 
 void RobotContainer::TestBindings(){

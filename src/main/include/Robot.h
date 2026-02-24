@@ -9,6 +9,9 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/CommandPtr.h>
 #include <optional>
+#include <frc/DriverStation.h>
+#include <frc/Timer.h>
+#include <frc/RobotController.h>
 
 #include "RobotContainer.h"
 
@@ -16,6 +19,7 @@ class Robot : public frc::TimedRobot {
 public:
     Robot();
     void RobotPeriodic() override;
+    void RobotInit() override;
     // void DisabledInit() override;
     // void DisabledPeriodic() override;
     // void DisabledExit() override;

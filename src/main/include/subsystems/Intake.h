@@ -4,11 +4,13 @@
 
 #pragma once
 
+#include "ctre/phoenix6/TalonFX.hpp"
+
 #include <frc/Timer.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include "ctre/phoenix6/TalonFX.hpp"
+
 #include "subsystems/modules/DualMotorModule.h"
 #include "subsystems/modules/SingleMotorModule.h"
 

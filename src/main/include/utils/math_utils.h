@@ -1,13 +1,15 @@
 #ifndef MATHUTILS_H
 #define MATHUTILS_H
+
+#include "units/angular_velocity.h"
+
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/geometry/Translation3d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <cmath>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include "units/angular_velocity.h"
 
 using namespace frc;
 using TPS = units::turns_per_second_t;

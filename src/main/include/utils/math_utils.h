@@ -15,7 +15,7 @@ using namespace frc;
 using TPS = units::turns_per_second_t;
 
 Rotation2d getAngleFromRobotToTarget(Translation2d target, Translation2d reference, Rotation2d direction);
-double getDistanceFromRobotToTarget(Translation2d target, Translation2d reference);
+Translation2d getDeltaTranslation(Translation2d target, Translation2d reference);
 TPS getTPSFromDistance(double distance, double y_intercept, double slope);
 
 #endif 

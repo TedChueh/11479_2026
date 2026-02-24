@@ -16,9 +16,8 @@ Rotation2d getAngleFromRobotToTarget(Translation2d target, Translation2d referen
     return frc::Rotation2d(units::radian_t(angleFromRobotToTarget));
 }
 
-double getDistanceFromRobotToTarget(Translation2d target, Translation2d reference) {
-    Translation2d distanceTranslation(units::meter_t((target - reference).X()),units::meter_t((target - reference).Y()));
-    return distanceTranslation.Distance(Translation2d(0_m,0_m)).value();
+Translation2d getDeltaTranslation(Translation2d target, Translation2d reference) {
+    return target - reference;
 }
 
 TPS getTPSFromDistance(double distance, double y_intercept, double slope) {

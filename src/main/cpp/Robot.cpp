@@ -22,12 +22,8 @@ void Robot::RobotPeriodic() {
     m_timeAndJoystickReplay.Update();
     frc2::CommandScheduler::GetInstance().Run();
 
-    frc::SmartDashboard::PutNumber(
-    "Match Time",frc::DriverStation::GetMatchTime().value());
-    
-    frc::SmartDashboard::PutNumber(
-        "Battery Voltage",
-        frc::RobotController::GetBatteryVoltage().value());
+    frc::SmartDashboard::PutNumber("Match Time", frc::DriverStation::GetMatchTime().value());
+    frc::SmartDashboard::PutNumber("Battery Voltage", frc::RobotController::GetBatteryVoltage().value());
 
     if (frc::DriverStation::IsDisabled()) {
         auto const allianceColor = frc::DriverStation::GetAlliance();

@@ -13,7 +13,6 @@
 
 RobotContainer::RobotContainer()
 {
-
     pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(4_s));
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
     frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
@@ -63,48 +62,47 @@ void RobotContainer::ConfigureBindings()
 
     joystick.POVUp().OnTrue(intake.Lifting(20_tr));
 
-
-
-
-
-    //testing bindings below
-
-    // joystick.A().OnTrue(
-    //     frc2::cmd::RunOnce([this] {
-    //         auto req = m_testModule.velocityControl.WithVelocity(20_tps);
-    //         m_testModule.motorRight.SetControl(req);
-    //         m_testModule.motorLeft.SetControl(req);
-    // }, {})
-    // );
-
-    // joystick.POVUp().WhileTrue(
-    //     drivetrain.ApplyRequest([this]() -> auto&& {
-    //         return forwardStraight.WithVelocityX(0.5_mps).WithVelocityY(0_mps);
-    //     })
-    // );
-    // joystick.POVDown().WhileTrue(
-    //     drivetrain.ApplyRequest([this]() -> auto&& {
-    //         return forwardStraight.WithVelocityX(-0.5_mps).WithVelocityY(0_mps);
-    //     })
-    // );
-
-
-    // joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
-    // joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
-    //     return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
-    // }));
-
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
-    // (joystick.Back() && joystick.Y()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
-    // (joystick.Back() && joystick.X()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
-    // (joystick.Start() && joystick.Y()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
-    // (joystick.Start() && joystick.X()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+    joystick.RightTrigger().WhileTrue(shooter.Shooting([] { return 60_tps; }));
 
     // reset the field-centric heading on left bumper press
     joystick.LeftBumper().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
-
+    
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
+
+    frc2::RobotModeTriggers::Teleop().OnTrue(
+      intake.Lifting(20_tr)   
+    );
+
+    frc2::RobotModeTriggers::Teleop().OnFalse(
+      intake.Stop()
+    );
+
+}
+
+void RobotContainer::TestBindings(){
+
+    joystick.POVUp().WhileTrue(
+        drivetrain.ApplyRequest([this]() -> auto&& {
+            return forwardStraight.WithVelocityX(0.5_mps).WithVelocityY(0_mps);
+        })
+    );
+    joystick.POVDown().WhileTrue(
+        drivetrain.ApplyRequest([this]() -> auto&& {
+            return forwardStraight.WithVelocityX(-0.5_mps).WithVelocityY(0_mps);
+        })
+    );
+
+    joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
+    joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
+        return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
+    }));
+
+    // Run SysId routines when holding back/start and X/Y.
+    // Note that each routine should be run exactly once in a single log.
+    (joystick.Back() && joystick.Y()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
+    (joystick.Back() && joystick.X()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
+    (joystick.Start() && joystick.Y()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
+    (joystick.Start() && joystick.X()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand()

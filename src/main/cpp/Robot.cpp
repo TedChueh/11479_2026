@@ -5,26 +5,29 @@
 #include "Robot.h"
 #include "LimelightHelpers.h"
 
+#include <cameraserver/CameraServer.h>
 #include <frc2/command/CommandScheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cmath>
 
-
 Robot::Robot() {}
 
-void Robot::RobotPeriodic() {
+void Robot::RobotInit() {
+    auto camera = frc::CameraServer::StartAutomaticCapture();
+    camera.SetResolution(320, 240);
+    camera.SetFPS(60);
+}
+
+void Robot::RobotPeriodic() {   
     m_timeAndJoystickReplay.Update();
     frc2::CommandScheduler::GetInstance().Run();
 
-    /*
-     * This example of adding Limelight is very simple and may not be sufficient for on-field use.
-     * Users typically need to provide a standard deviation that scales with the distance to target
-     * and changes with number of tags available.
-     *
-     * This example is sufficient to show that vision integration is possible, though exact implementation
-     * of how to use vision should be tuned per-robot and to the team's specification.
-     */
-
+    frc::SmartDashboard::PutNumber(
+    "Match Time",frc::DriverStation::GetMatchTime().value());
+    
+    frc::SmartDashboard::PutNumber(
+        "Battery Voltage",
+        frc::RobotController::GetBatteryVoltage().value());
 
     if (frc::DriverStation::IsDisabled()) {
         auto const allianceColor = frc::DriverStation::GetAlliance();

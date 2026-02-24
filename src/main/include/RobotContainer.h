@@ -53,6 +53,7 @@ public:
 
 private:
     void ConfigureBindings();
+    void TestBindings();
 
     IntakeSubsystem intake{
         1, 2,

@@ -36,11 +36,15 @@ CommandPtr IntakeSubsystem::Stop() {
 }
 
 void IntakeSubsystem::ActivateIntake(TPS tps) {
+  status = true;
+
   intakeModule.motorLeft.SetControl(intakeModule.velocityControl.WithVelocity(tps));
   intakeModule.motorRight.SetControl(intakeModule.velocityControl.WithVelocity(tps));
 }
 
 void IntakeSubsystem::DeactivateIntake() {
+  status = false;
+
   intakeModule.motorLeft.SetControl(controls::NeutralOut{});
   intakeModule.motorRight.SetControl(controls::NeutralOut{});
 }
@@ -55,4 +59,8 @@ void IntakeSubsystem::LiftByTurns(Turn turns) {
   auto s1 = armModule.motorLeft.SetControl(armModule.motionMagicControl.WithPosition(leftTarget));
   auto s2 = armModule.motorRight.SetControl(armModule.motionMagicControl.WithPosition(rightTarget));
   fmt::print("pressed  s1={}  s2={}\n", s1.GetName(), s2.GetName());
+}
+
+void IntakeSubsystem::Periodic() {
+    SmartDashboard::PutBoolean("Intake Status", status);
 }

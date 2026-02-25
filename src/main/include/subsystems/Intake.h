@@ -10,6 +10,7 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/modules/DualMotorModule.h"
 #include "subsystems/modules/SingleMotorModule.h"
@@ -40,8 +41,11 @@ class IntakeSubsystem : public SubsystemBase {
         void ActivateIntake(TPS tps);
         void DeactivateIntake();
         void LiftByTurns(Turn turns);
-
+        
+        void Periodic() override;
     private:
         DualMotorModule intakeModule;
         DualMotorModule armModule;
+
+        bool status = false;
 };

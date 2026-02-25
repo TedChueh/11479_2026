@@ -1,6 +1,6 @@
 #include "utils/math_utils.h"
 
-Rotation2d getAngleFromRobotToTarget(Translation2d targetPosition, Translation2d robotPosition, Rotation2d robotDirection) {
+Rotation2d calcHeadingError(Translation2d targetPosition, Translation2d robotPosition, Rotation2d robotDirection) {
     Translation3d distanceTranslation(units::meter_t((targetPosition - robotPosition).X()),units::meter_t((targetPosition - robotPosition).Y()), units::meter_t(0));
     Translation3d botDirectionTranslation(units::meter_t(robotDirection.Cos()), units::meter_t(robotDirection.Sin()), units::meter_t(0));
     
@@ -16,7 +16,7 @@ Rotation2d getAngleFromRobotToTarget(Translation2d targetPosition, Translation2d
     return frc::Rotation2d(units::radian_t(angleFromRobotToTarget));
 }
 
-Translation2d getDeltaTranslation(Translation2d targetPosition, Translation2d referencePosition) {
+Translation2d calcRelativeTranslationToTarget(Translation2d targetPosition, Translation2d referencePosition) {
     return targetPosition - referencePosition;
 }
 

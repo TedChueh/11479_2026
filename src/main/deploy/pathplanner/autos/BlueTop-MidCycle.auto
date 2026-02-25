@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueTop_NeutralTop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NeutralTop-NeutralBottom"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NetrualBottom-ShootingBottom"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -50,7 +50,7 @@ public:
 
 private:
     /* Path follower */
-    SendableChooser<frc2::Command *> autoChooser;
+    SendableChooser<Command *> autoChooser;
 
 public:
     RobotContainer();

@@ -13,7 +13,7 @@
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
-#include "subsystems/VisionSubsystem.h"
+#include "subsystems/Vision.h"
 #include "Telemetry.h"
 
 using namespace std;

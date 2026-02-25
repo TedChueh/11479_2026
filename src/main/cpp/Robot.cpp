@@ -13,38 +13,47 @@
 Robot::Robot() {}
 
 void Robot::RobotInit() {
-    auto camera = frc::CameraServer::StartAutomaticCapture();
+    auto camera = CameraServer::StartAutomaticCapture();
     camera.SetResolution(320, 240);
     camera.SetFPS(60);
 }
 
 void Robot::RobotPeriodic() {   
+    CommandScheduler::GetInstance().Run();
     m_timeAndJoystickReplay.Update();
-    frc2::CommandScheduler::GetInstance().Run();
 
-    frc::SmartDashboard::PutNumber("Match Time", frc::DriverStation::GetMatchTime().value());
-    frc::SmartDashboard::PutNumber("Battery Voltage", frc::RobotController::GetBatteryVoltage().value());
+    // SmartDashboard Basic Informations Output
+    SmartDashboard::PutNumber("Match Time", DriverStation::GetMatchTime().value());
+    SmartDashboard::PutNumber("Battery Voltage", RobotController::GetBatteryVoltage().value());
 
-    if (frc::DriverStation::IsDisabled()) {
-        auto const allianceColor = frc::DriverStation::GetAlliance();
+    // Auto Aiming Target Selection
+    if (DriverStation::IsDisabled()) {
+        auto const allianceColor = DriverStation::GetAlliance();
         if (allianceColor) {
-                *allianceColor == frc::DriverStation::Alliance::kRed
-                    ? m_container.TargetTranslation = frc::Translation2d{11.915394_m, 4.033663_m} // Red alliance target position
-                    : m_container.TargetTranslation = frc::Translation2d{4.625594_m, 4.033663_m}; // Blue alliance target position
+                *allianceColor == DriverStation::Alliance::kRed
+                    ? m_container.TargetTranslation = Translation2d{11.915394_m, 4.033663_m} // Red alliance target position
+                    : m_container.TargetTranslation = Translation2d{4.625594_m, 4.033663_m}; // Blue alliance target position
         }
     }
 
-    auto const driveState = m_container.drivetrain.GetState();
-    auto const pose  = driveState.Pose;
-    auto const heading = driveState.Pose.Rotation().Degrees();
-    auto const omega = driveState.Speeds.omega;
+    // Limelight Measurement
+    auto& drivetrain = m_container.drivetrain;
+    auto& vision = m_container.m_vision;
+    auto const driveState = drivetrain.GetState();
+    auto const pose = driveState.Pose;
+
+    meters_per_second_t translationSpeed = math::hypot(driveState.Speeds.vx, driveState.Speeds.vy);
     m_container.m_Field2d.SetRobotPose(pose);
 
-    if (kUseLimelight && !frc::DriverStation::IsAutonomousEnabled()) {
-        LimelightHelpers::SetRobotOrientation("limelight", heading.value(), 0, 0, 0, 0, 0);
-        auto llMeasurement = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        if (llMeasurement && llMeasurement->tagCount > 0 && units::math::abs(omega) < 2_tps) {
-            m_container.drivetrain.AddVisionMeasurement(llMeasurement->pose, llMeasurement->timestampSeconds);
+    if (kUseLimelight) {
+        vision.PeriodicUpdate(pose, translationSpeed, driveState.Speeds.omega);
+        if(auto meas = vision.GetMeasurement()) {
+            if (meas->isReliableForSeeding){
+                drivetrain.ResetPose(meas->pose);
+            }
+            else {
+                drivetrain.AddVisionMeasurement(meas->pose, meas->timestamp, {meas->xyStdDev, meas->xyStdDev, meas->rotStdDev});
+            }
         }
     }
 }

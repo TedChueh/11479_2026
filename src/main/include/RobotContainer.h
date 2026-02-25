@@ -11,14 +11,20 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "subsystems/CommandSwerveDrivetrain.h"
-#include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
+#include "subsystems/Shooter.h"
+#include "subsystems/VisionSubsystem.h"
 #include "Telemetry.h"
+
+using namespace std;
+using namespace frc;
+using namespace frc2;
+using namespace units;
 
 class RobotContainer {
 private:
-    units::meters_per_second_t MaxSpeed = 1.0 * TunerConstants::kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
-    units::radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
+    meters_per_second_t MaxSpeed = 1.0 * TunerConstants::kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
+    radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     swerve::requests::FieldCentric FieldCentric_Manualdrive = swerve::requests::FieldCentric{}
@@ -36,20 +42,21 @@ private:
      *       define a destructor to un-register the telemetry from the drivetrain */
     Telemetry logger{MaxSpeed};
 
-    frc2::CommandXboxController joystick{0};
+    CommandXboxController joystick{0};
 
 public:
     subsystems::CommandSwerveDrivetrain drivetrain{TunerConstants::CreateDrivetrain()};
+    VisionSubsystem m_vision;
 
 private:
     /* Path follower */
-    frc::SendableChooser<frc2::Command *> autoChooser;
+    SendableChooser<frc2::Command *> autoChooser;
 
 public:
     RobotContainer();
-    frc2::Command *GetAutonomousCommand();
-    frc::Field2d m_Field2d;
-    frc::Translation2d TargetTranslation{}; 
+    Command *GetAutonomousCommand();
+    Field2d m_Field2d;
+    Translation2d TargetTranslation{}; 
 
 private:
     void ConfigureBindings();
@@ -130,23 +137,4 @@ private:
             .RampPeriod = 0.1_s
         }
     };
-
-    // DualMotorModule::Config m_testConfig{
-    // .motorRightInvert = true,
-    // .motorLeftInvert  = false,
-
-    // .kS = 0.25,
-    // .kV = 0.101,
-    // .kA = 0.0,
-    // .kP = 0.0,
-    // .kI = 0.0,
-    // .kD = 0.0,
-
-    // .PeakVoltage = 8_V,
-    // .PeakCurrent = 40_A,
-    // .RampPeriod  = 0.5_s,
-
-    // };
-
-    // DualMotorModule m_testModule{1, 2, m_testConfig};
 };

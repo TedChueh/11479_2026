@@ -13,8 +13,8 @@ ShooterSubsystem::ShooterSubsystem(
   SingleMotorModule::Config conveyerConfig
 ): shootModule{shootRightID, shootLeftID, shootConfig}, suctionModule{suctionID, suctionConfig}, conveyerModule{conveyerID, conveyerConfig} {}
 
-frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps) {
-  return frc2::cmd::Run(
+CommandPtr ShooterSubsystem::Shooting(function<TPS()> shootTps) {
+  return cmd::Run(
       [this, shootTps] {
           TPS currentTps = shootTps();
 
@@ -23,7 +23,7 @@ frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps) {
               ActivateSuction(0_tps);
               ActivateConveyer(0_tps);
 
-              frc::SmartDashboard::PutString("Shooter Alert", "RPM too low, stopping operation");
+              SmartDashboard::PutString("Shooter Alert", "RPM too low, stopping operation");
           } else {
               ActivateShooter(currentTps);  
               if (m_timer.HasElapsed(0.5_s)) {
@@ -31,7 +31,7 @@ frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps) {
                   ActivateConveyer(20_tps);
               }
 
-              frc::SmartDashboard::PutString("Shooter Alert", "");
+              SmartDashboard::PutString("Shooter Alert", "");
           }
       },{this}
   ).BeforeStarting(
@@ -42,8 +42,8 @@ frc2::CommandPtr ShooterSubsystem::Shooting(std::function<TPS()> shootTps) {
   );
 }
 
-frc2::CommandPtr ShooterSubsystem::Stop() {
-  return frc2::cmd::Run(
+CommandPtr ShooterSubsystem::Stop() {
+  return cmd::Run(
       [this]{
         DeactivateShooter();
         DeactivateSuction();

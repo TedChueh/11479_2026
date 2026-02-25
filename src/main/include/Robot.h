@@ -15,7 +15,12 @@
 
 #include "RobotContainer.h"
 
-class Robot : public frc::TimedRobot {
+using namespace std;
+using namespace frc;
+using namespace frc2;
+using namespace units;
+
+class Robot : public TimedRobot {
 public:
     Robot();
     void RobotInit() override;
@@ -36,7 +41,7 @@ public:
 private:
     static constexpr bool kUseLimelight = true;
 
-    frc2::Command *m_autonomousCommand;
+    Command *m_autonomousCommand;
 
     RobotContainer m_container;
 

@@ -15,10 +15,14 @@
 #include "subsystems/modules/DualMotorModule.h"
 #include "subsystems/modules/SingleMotorModule.h"
 
+using namespace std;
+using namespace frc;
+using namespace frc2;
+using namespace units;
 using namespace ctre::phoenix6;
 using TPS = units::turns_per_second_t;
 
-class ShooterSubsystem : public frc2::SubsystemBase {
+class ShooterSubsystem : public SubsystemBase {
  public:
   ShooterSubsystem(
     int shootRightID,
@@ -30,9 +34,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
     SingleMotorModule::Config conveyerConfig
   );
 
-  frc2::CommandPtr Shooting(std::function<TPS()> shootTps);
+  CommandPtr Shooting(function<TPS()> shootTps);
 
-  frc2::CommandPtr Stop();
+  CommandPtr Stop();
 
   void ActivateShooter(TPS tps);
 
@@ -52,7 +56,7 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 //   void Periodic() override;
 
  private:
-  frc::Timer m_timer; 
+  Timer m_timer; 
   DualMotorModule shootModule;
   SingleMotorModule suctionModule;
   SingleMotorModule conveyerModule;

@@ -11,24 +11,24 @@ IntakeSubsystem::IntakeSubsystem(
     DualMotorModule::Config armConfig
 ): intakeModule{intakeRightID, intakeLeftID, intakeConfig}, armModule{armRightID, armLeftID, armConfig} {}
 
-frc2::CommandPtr IntakeSubsystem::Intaking(std::function<TPS()> intakeTps) {
-  return frc2::cmd::Run(
+CommandPtr IntakeSubsystem::Intaking(function<TPS()> intakeTps) {
+  return cmd::Run(
       [this, intakeTps] {
         ActivateIntake(intakeTps());
       },{this}
   );
 }
 
-frc2::CommandPtr IntakeSubsystem::Lifting(Turn turns) {
-  return frc2::cmd::RunOnce(
+CommandPtr IntakeSubsystem::Lifting(Turn turns) {
+  return cmd::RunOnce(
       [this, turns] {
         LiftByTurns(turns);
       },{this}
   );
 }
 
-frc2::CommandPtr IntakeSubsystem::Stop() {
-  return frc2::cmd::Run(
+CommandPtr IntakeSubsystem::Stop() {
+  return cmd::Run(
       [this] {
         DeactivateIntake();
       },{this}

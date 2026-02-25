@@ -15,8 +15,8 @@ RobotContainer::RobotContainer()
 {
     pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(4_s));
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
-    frc::SmartDashboard::PutData("Auto Mode", &autoChooser);
-    frc::Shuffleboard::GetTab("Field").Add("Field", m_Field2d).WithSize(6, 4);
+    SmartDashboard::PutData("Auto Mode", &autoChooser);
+    Shuffleboard::GetTab("Field").Add("Field", m_Field2d).WithSize(6, 4);
 
     ConfigureBindings();
 }
@@ -39,17 +39,17 @@ void RobotContainer::ConfigureBindings()
     );
 
     // Disable Mode Trigger
-    frc2::RobotModeTriggers::Disabled().WhileTrue(
+    RobotModeTriggers::Disabled().WhileTrue(
         drivetrain.ApplyRequest([] {
             return swerve::requests::Idle{};
         }).IgnoringDisable(true)
     );
 
     // Teleop Mode Trigger
-    frc2::RobotModeTriggers::Teleop().OnTrue(
+    RobotModeTriggers::Teleop().OnTrue(
         intake.Lifting(20_tr)
     );
-    frc2::RobotModeTriggers::Teleop().OnFalse(
+    RobotModeTriggers::Teleop().OnFalse(
         intake.Stop()
     );
     
@@ -69,7 +69,7 @@ void RobotContainer::ConfigureBindings()
     );
     joystick.B().OnTrue(
         drivetrain.RunOnce([this] { 
-            drivetrain.ResetPose(frc::Pose2d(0_m, 4.033663_m, frc::Rotation2d(0_deg)));
+            drivetrain.ResetPose(Pose2d(0_m, 4.033663_m, Rotation2d(0_deg)));
         })
     );
     joystick.Y().WhileTrue(
@@ -110,7 +110,7 @@ void RobotContainer::TestBindings(){
 
     joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
     joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
-        return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
+        return point.WithModuleDirection(Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
     }));
 
     // Run SysId routines when holding back/start and X/Y.
@@ -121,7 +121,7 @@ void RobotContainer::TestBindings(){
     (joystick.Start() && joystick.X()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 }
 
-frc2::Command *RobotContainer::GetAutonomousCommand()
+Command *RobotContainer::GetAutonomousCommand()
 {
     return autoChooser.GetSelected(); 
 }

@@ -14,11 +14,15 @@
 #include "subsystems/modules/DualMotorModule.h"
 #include "subsystems/modules/SingleMotorModule.h"
 
+using namespace std;
+using namespace frc;
+using namespace frc2;
+using namespace units;
 using namespace ctre::phoenix6;
 using TPS = units::turns_per_second_t;
 using Turn = units::turn_t;
 
-class IntakeSubsystem : public frc2::SubsystemBase {
+class IntakeSubsystem : public SubsystemBase {
     public:
         IntakeSubsystem(
             int intakeRightID, 
@@ -29,9 +33,9 @@ class IntakeSubsystem : public frc2::SubsystemBase {
             DualMotorModule::Config armConfig
         );
 
-        frc2::CommandPtr Intaking(std::function<TPS()> intakeTps);
-        frc2::CommandPtr Lifting(Turn turns);
-        frc2::CommandPtr Stop();
+        CommandPtr Intaking(function<TPS()> intakeTps);
+        CommandPtr Lifting(Turn turns);
+        CommandPtr Stop();
 
         void ActivateIntake(TPS tps);
         void DeactivateIntake();

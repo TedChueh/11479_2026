@@ -8,11 +8,12 @@ Rotation2d calcHeadingError(Translation2d targetPosition, Translation2d robotPos
     double dot   = botDirVec.X().value() * toTarget.X().value() + botDirVec.Y().value() * toTarget.Y().value();
     double angle = atan2(cross, dot);
 
-    return Rotation2d(units::radian_t(angle));
+    return Rotation2d(radian_t(angle));
 }
 
-Translation2d calcRelativeTranslationToTarget(Translation2d targetPosition, Translation2d referencePosition) {
-    return targetPosition - referencePosition;
+double calcRelativeDistanceToTarget(Translation2d targetPosition, Translation2d referencePosition) {
+    Translation2d diff = targetPosition - referencePosition;
+    return diff.Norm().value();
 }
 
 TPS getTPSFromDistance(double distance, double y_intercept, double slope) {
@@ -33,4 +34,26 @@ TPS getTPSFromDistance(double distance, double y_intercept, double slope) {
     SmartDashboard::PutNumber("Shooter Raw TPS: ", raw_tps);
     SmartDashboard::PutNumber("Shooter TPS: ", tps);
     return TPS{tps};
+}
+
+Rotation2d calcVelocityCompAngle(double shootDegree, double deltaHeight, Translation2d targetPosition, Translation2d robotPosition, ChassisSpeeds robotVelocity) {
+
+    Translation2d targetVector     = targetPosition - robotPosition;
+    double        targetDistance   = targetVector.Norm().value();
+    Translation2d targetUnitVector{meter_t(targetVector.X().value() / targetDistance), meter_t(targetVector.Y().value() / targetDistance)};    
+    
+    double denom = 2 * (targetDistance * tan(shootDegree * M_PI / 180.0) - deltaHeight);
+    if (denom <= 0) {
+        SmartDashboard::PutString("Velocity Comp Angle Warning⚠️: ", "Denominator <= 0");
+        return Rotation2d(0_rad);
+    }
+    double desiredVx = sqrt((g * targetDistance * targetDistance) / denom);
+
+    // TV = Target Vector, RVV = Robot Velocity Vector
+    double TVcrossRVV = targetVector.X().value() * robotVelocity.vy.value() - targetVector.Y().value() * robotVelocity.vx.value();
+    double tangentialSpeed = TVcrossRVV / targetDistance;
+
+    double compAngleRad = atan2(tangentialSpeed, desiredVx);
+
+    return Rotation2d(radian_t(compAngleRad));
 }

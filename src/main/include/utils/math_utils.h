@@ -14,9 +14,11 @@ using namespace frc;
 using namespace units;
 using TPS = turns_per_second_t;
 
+constexpr double g = 9.81;
+
 Rotation2d calcHeadingError(Translation2d targetPosition, Translation2d robotPosition, Rotation2d robotDirection);
-Translation2d calcRelativeTranslationToTarget(Translation2d targetPosition, Translation2d referencePosition);
+double calcRelativeDistanceToTarget(Translation2d targetPosition, Translation2d referencePosition);
 TPS getTPSFromDistance(double distance, double y_intercept, double slope);
-// Rotation2d calcVelocityCompAngle(double shootAngle, double deltaHeight, Translation2d targetPosition, Translation2d robotPosition, ChassisSpeeds robotVelocity);
+Rotation2d calcVelocityCompAngle(double shootDegree, double deltaHeight, Translation2d targetPosition, Translation2d robotPosition, ChassisSpeeds robotVelocity);
 
 #endif 

@@ -2,6 +2,7 @@
 
 #include <frc/SmartDashboard/SmartDashboard.h>
 #include <frc/geometry/Pose2d.h> 
+#include <frc/DriverStation.h>
 #include <frc2/command/SubsystemBase.h>
 #include <units/length.h>           
 #include <units/velocity.h>         

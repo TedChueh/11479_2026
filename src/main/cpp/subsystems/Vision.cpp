@@ -20,18 +20,30 @@ void VisionSubsystem::PeriodicUpdate(const Pose2d& robotPose, const meters_per_s
         return;
     }
 
+    // 更新頻率限制 至少100ms
+    static second_t lastVisionUpdate = 0_s;
+    second_t currentTimestamp = second_t(llMeasurement->timestampSeconds);
+
+    if (currentTimestamp - lastVisionUpdate < 0.1_s) {
+        m_measurement.reset();
+        return;
+    }
+    lastVisionUpdate = currentTimestamp;
+    
     // --- 進入過濾階段 ---
     double dist = llMeasurement->avgTagDist;
     int tagCount = llMeasurement->tagCount;
 
     // A. 距離過濾
-    if (meter_t{dist} > 4.5_m) {
+    if (meter_t{dist} > 4.0_m) {
         m_measurement.reset();
         return;
     }
 
     // B. 速度過濾
-    if (translationSpeed > 4.0_mps || math::abs(angularVelocity) > 720_deg_per_s) {
+    bool isAuto = DriverStation::IsAutonomous();
+    meters_per_second_t maxSpeed = isAuto ? 1_mps : 2.0_mps; 
+    if (translationSpeed > maxSpeed || math::abs(angularVelocity) > 360_deg_per_s) {
         m_measurement.reset();
         return;
     }
@@ -41,10 +53,10 @@ void VisionSubsystem::PeriodicUpdate(const Pose2d& robotPose, const meters_per_s
     
     //【關鍵邏輯】判斷這筆數據是否具備「強制重設 (Seed)」的資格
     // 條件：誤差大、機器人幾乎靜止、且看到多個 Tag 以確保位置絕對正確
-    bool canForceSeed = (poseError > 1.0_m && translationSpeed < 0.1_mps && tagCount >= 2);
+    bool canForceSeed = (poseError > 0.7_m && translationSpeed < 0.1_mps && tagCount >= 2);
 
-    // 如果誤差大於 1 公尺，但又不符合「強制重設」的條件，這筆數據就有問題，丟棄它
-    if (poseError > 1.0_m && !canForceSeed) {
+    // 如果誤差大於 0.5 公尺，但又不符合「強制重設」的條件，這筆數據就有問題，丟棄它
+    if (poseError > 0.5_m && !canForceSeed) {
         m_measurement.reset();
         return;
     }
@@ -54,9 +66,9 @@ void VisionSubsystem::PeriodicUpdate(const Pose2d& robotPose, const meters_per_s
     double rotStdDev = 999999.0; // 始終不信任視覺旋轉，交給 Pigeon 2
 
     if (tagCount >= 2) {
-        xyStdDev = 0.1 + (dist * 0.1); 
+        xyStdDev = 0.2 + (dist * 0.15);
     } else {
-        xyStdDev = 0.4 + (dist * 0.3);
+        xyStdDev = 0.6 + (dist * 0.4);
     }
 
     // 打包數據
@@ -65,7 +77,7 @@ void VisionSubsystem::PeriodicUpdate(const Pose2d& robotPose, const meters_per_s
     vm.xyStdDev = xyStdDev;
     vm.rotStdDev = rotStdDev;
     vm.tagCount = tagCount;
-    vm.timestamp = second_t(llMeasurement->timestampSeconds);
+    vm.timestamp = currentTimestamp;
     
     // --- 新增：將判定結果傳給底盤 ---
     vm.isReliableForSeeding = canForceSeed; 

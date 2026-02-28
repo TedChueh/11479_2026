@@ -1,6 +1,8 @@
 #include "utils/math_utils.h"
 
-Rotation2d calcHeadingError(Translation2d targetPosition, Translation2d robotPosition, Rotation2d robotDirection) {
+Rotation2d calcHeadingError(Translation2d targetPosition, const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState) {
+    Translation2d robotPosition  = robotState.Pose.Translation();
+    Rotation2d    robotDirection = robotState.Pose.Rotation();
     Translation2d toTarget = targetPosition - robotPosition;
     Translation2d botDirVec(meter_t(robotDirection.Cos()), meter_t(robotDirection.Sin()));
     
@@ -36,24 +38,34 @@ TPS getTPSFromDistance(double distance, double y_intercept, double slope) {
     return TPS{tps};
 }
 
-Rotation2d calcVelocityCompAngle(double shootDegree, double deltaHeight, Translation2d targetPosition, Translation2d robotPosition, ChassisSpeeds robotVelocity) {
+Rotation2d calcVelocityCompAngle(degree_t shootDegree,
+                                 meter_t deltaHeight,
+                                 Translation2d targetPosition,
+                                 const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState) {
 
-    Translation2d targetVector     = targetPosition - robotPosition;
-    double        targetDistance   = targetVector.Norm().value();
-    Translation2d targetUnitVector{meter_t(targetVector.X().value() / targetDistance), meter_t(targetVector.Y().value() / targetDistance)};    
-    
-    double denom = 2 * (targetDistance * tan(shootDegree * M_PI / 180.0) - deltaHeight);
-    if (denom <= 0) {
+    Translation2d robotPosition  = robotState.Pose.Translation();
+    ChassisSpeeds robotVelocity  = robotState.Speeds;
+
+    Translation2d targetVector   = targetPosition - robotPosition;
+    meter_t targetDistance       = targetVector.Norm();
+
+    double shootRad = shootDegree.to<double>() * M_PI / 180.0;
+
+    meter_t denom = 2.0 * (targetDistance * tan(shootRad) - deltaHeight);
+    if (denom <= 0_m) {
         SmartDashboard::PutString("Velocity Comp Angle Warning⚠️: ", "Denominator <= 0");
         return Rotation2d(0_rad);
     }
-    double desiredVx = sqrt((g * targetDistance * targetDistance) / denom);
 
-    // TV = Target Vector, RVV = Robot Velocity Vector
-    double TVcrossRVV = targetVector.X().value() * robotVelocity.vy.value() - targetVector.Y().value() * robotVelocity.vx.value();
-    double tangentialSpeed = TVcrossRVV / targetDistance;
+    meters_per_second_t desiredVx{
+        std::sqrt((g_accel * targetDistance * targetDistance / denom).value())
+    };
 
-    double compAngleRad = atan2(tangentialSpeed, desiredVx);
+    double TVcrossRVV = targetVector.X().value() * robotVelocity.vy.value() -
+                        targetVector.Y().value() * robotVelocity.vx.value();
+    double tangentialSpeed = TVcrossRVV / targetDistance.value();
+
+    double compAngleRad = atan2(tangentialSpeed, desiredVx.value());
 
     return Rotation2d(radian_t(compAngleRad));
 }

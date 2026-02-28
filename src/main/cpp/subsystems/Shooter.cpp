@@ -53,6 +53,7 @@ CommandPtr ShooterSubsystem::Stop() {
 }
 
 void ShooterSubsystem::ActivateShooter(TPS tps) {
+  status = true;
   shootModule.motorLeft.SetControl(shootModule.velocityControl.WithVelocity(tps));
   shootModule.motorRight.SetControl(shootModule.velocityControl.WithVelocity(tps));
 }
@@ -66,6 +67,7 @@ void ShooterSubsystem::ActivateConveyer(TPS tps) {
 }
 
 void ShooterSubsystem::DeactivateShooter() {
+  status = false;
   shootModule.motorLeft.SetControl(controls::NeutralOut{});
   shootModule.motorRight.SetControl(controls::NeutralOut{});
 }
@@ -78,6 +80,6 @@ void ShooterSubsystem::DeactivateConveyer() {
   conveyerModule.motor.SetControl(controls::NeutralOut{});
 }
 
-// void Shooter::Periodic() {
-//   // Implementation of subsystem periodic method goes here.
-// }
+void ShooterSubsystem::Periodic() {
+   SmartDashboard::PutBoolean("Shooter Status", status);
+} 

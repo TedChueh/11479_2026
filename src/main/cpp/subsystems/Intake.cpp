@@ -14,6 +14,7 @@ IntakeSubsystem::IntakeSubsystem(
 CommandPtr IntakeSubsystem::Intaking(function<TPS()> intakeTps) {
   return cmd::Run(
       [this, intakeTps] {
+        intakeStatus = true;
         ActivateIntake(intakeTps());
       },{this}
   );
@@ -22,6 +23,7 @@ CommandPtr IntakeSubsystem::Intaking(function<TPS()> intakeTps) {
 CommandPtr IntakeSubsystem::Lifting(Turn turns) {
   return cmd::RunOnce(
       [this, turns] {
+        armStatus = true;
         LiftByTurns(turns);
       },{this}
   );
@@ -30,21 +32,18 @@ CommandPtr IntakeSubsystem::Lifting(Turn turns) {
 CommandPtr IntakeSubsystem::Stop() {
   return cmd::Run(
       [this] {
+        intakeStatus = false;
         DeactivateIntake();
       },{this}
   );
 }
 
 void IntakeSubsystem::ActivateIntake(TPS tps) {
-  status = true;
-
   intakeModule.motorLeft.SetControl(intakeModule.velocityControl.WithVelocity(tps));
   intakeModule.motorRight.SetControl(intakeModule.velocityControl.WithVelocity(tps));
 }
 
 void IntakeSubsystem::DeactivateIntake() {
-  status = false;
-
   intakeModule.motorLeft.SetControl(controls::NeutralOut{});
   intakeModule.motorRight.SetControl(controls::NeutralOut{});
 }
@@ -62,5 +61,6 @@ void IntakeSubsystem::LiftByTurns(Turn turns) {
 }
 
 void IntakeSubsystem::Periodic() {
-    SmartDashboard::PutBoolean("Intake Status", status);
+    SmartDashboard::PutBoolean("Intake Status", intakeStatus);
+    SmartDashboard::PutBoolean("Arm Status", armStatus);
 }

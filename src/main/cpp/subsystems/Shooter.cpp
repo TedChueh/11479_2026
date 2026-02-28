@@ -19,12 +19,15 @@ CommandPtr ShooterSubsystem::Shooting(function<TPS()> shootTps) {
           TPS currentTps = shootTps();
 
           if (currentTps < 20_tps) {
-              ActivateShooter(0_tps);
-              ActivateSuction(0_tps);
-              ActivateConveyer(0_tps);
+              systemStatus = false;
+              DeactivateShooter();
+              DeactivateSuction();
+              DeactivateConveyer();
 
               SmartDashboard::PutString("Shooter Alert", "RPM too low, stopping operation");
-          } else {
+          } 
+          else {
+              systemStatus = true;
               ActivateShooter(currentTps);  
               if (m_timer.HasElapsed(0.5_s)) {
                   ActivateSuction(20_tps);
@@ -53,7 +56,6 @@ CommandPtr ShooterSubsystem::Stop() {
 }
 
 void ShooterSubsystem::ActivateShooter(TPS tps) {
-  status = true;
   shootModule.motorLeft.SetControl(shootModule.velocityControl.WithVelocity(tps));
   shootModule.motorRight.SetControl(shootModule.velocityControl.WithVelocity(tps));
 }
@@ -67,7 +69,6 @@ void ShooterSubsystem::ActivateConveyer(TPS tps) {
 }
 
 void ShooterSubsystem::DeactivateShooter() {
-  status = false;
   shootModule.motorLeft.SetControl(controls::NeutralOut{});
   shootModule.motorRight.SetControl(controls::NeutralOut{});
 }
@@ -81,5 +82,5 @@ void ShooterSubsystem::DeactivateConveyer() {
 }
 
 void ShooterSubsystem::Periodic() {
-   SmartDashboard::PutBoolean("Shooter Status", status);
+   SmartDashboard::PutBoolean("Shooter Status", systemStatus);
 } 

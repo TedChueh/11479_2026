@@ -59,5 +59,5 @@ class ShooterSubsystem : public SubsystemBase {
       SingleMotorModule suctionModule;
       SingleMotorModule conveyerModule;
 
-      bool status = false;
+      bool systemStatus = false;
 };

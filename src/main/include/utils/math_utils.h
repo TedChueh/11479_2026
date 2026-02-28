@@ -6,14 +6,13 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/geometry/Translation2d.h>
-#include <frc/geometry/Translation3d.h>
 #include <frc/geometry/Rotation2d.h>
-#include <Eigen/Core>
-#include <Eigen/Dense>
 #include <cmath>
 
+using namespace std;
 using namespace frc;
-using TPS = units::turns_per_second_t;
+using namespace units;
+using TPS = turns_per_second_t;
 
 Rotation2d calcHeadingError(Translation2d targetPosition, Translation2d robotPosition, Rotation2d robotDirection);
 Translation2d calcRelativeTranslationToTarget(Translation2d targetPosition, Translation2d referencePosition);

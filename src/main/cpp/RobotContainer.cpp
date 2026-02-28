@@ -55,42 +55,61 @@ void RobotContainer::ConfigureBindings()
     );
     
     // Joystick Binding
-    joystick.X().WhileTrue(
+    joystick.Y().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
             return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) 
                 .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) 
                 .WithTargetDirection(drivetrain.GetState().Pose.Rotation() + 
-                 calcHeadingError(TargetTranslation , drivetrain.GetState()));
+                 calcHeadingError(targetTranslation , drivetrain.GetState())+ calcVelocityCompAngle(degree_t(61.32), meter_t(1.33), targetTranslation, drivetrain.GetState()));
         })
     );
-    joystick.A().ToggleOnTrue(
+
+    joystick.X().WhileTrue(
+        drivetrain.ApplyRequest([this]() -> auto&& {
+            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) 
+                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) 
+                .WithTargetDirection(allianceDirection);
+        })
+    );
+
+    joystick.RightTrigger().WhileTrue(
+        shooter.Shooting([this] { 
+            return getTPSFromDistance(calcRelativeDistanceToTarget(targetTranslation, drivetrain.GetState().Pose.Translation()), 24.375, 12.5); 
+        })
+    );
+
+   joystick.RightBumper().WhileTrue(
+        shooter.Shooting([] { 
+            return 60_tps; 
+        })
+    );
+
+    joystick.LeftTrigger().ToggleOnTrue(
         intake.Intaking([] { 
             return 30_tps; 
         })
     );
+
     joystick.B().OnTrue(
-        drivetrain.RunOnce([this] { 
-            drivetrain.ResetPose(Pose2d(0_m, 4.033663_m, Rotation2d(0_deg)));
-        })
-    );
-    joystick.Y().WhileTrue(
-        shooter.Shooting([] { 
-            return 60_tps; 
-        })
-    );
-    joystick.POVUp().OnTrue(
         intake.Lifting(20_tr)
     );
-    joystick.RightTrigger().WhileTrue(
-        shooter.Shooting([] { 
-            return 60_tps; 
-        })
+
+    joystick.A().OnTrue(
+        intake.Lifting(-20_tr)
     );
+
+
     joystick.LeftBumper().OnTrue(
         drivetrain.RunOnce([this] { 
             drivetrain.SeedFieldCentric(); 
         })
     ); // reset the field-centric heading on left bumper press
+
+    joystick.Back().OnTrue(
+        drivetrain.RunOnce([this] { 
+            drivetrain.ResetPose(Pose2d(3.648_m, 4.033663_m, Rotation2d(0_deg)));
+        })
+    );
 
     // Register Telemetry
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });

@@ -36,7 +36,7 @@ private:
         .WithDriveRequestType(swerve::DriveRequestType::Velocity);
     swerve::requests::FieldCentricFacingAngle FieldCentricFacingAngle_Manualdrive = swerve::requests::FieldCentricFacingAngle{}
         .WithDeadband(MaxSpeed * 0.05).WithRotationalDeadband(MaxAngularRate * 0.05) // Add a 5% deadband
-        .WithDriveRequestType(swerve::DriveRequestType::Velocity).WithHeadingPID(8, 0, 0); // Use open-loop control for drive motors
+        .WithDriveRequestType(swerve::DriveRequestType::Velocity).WithHeadingPID(10, 0, 0); // Use open-loop control for drive motors
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */
@@ -56,7 +56,8 @@ public:
     RobotContainer();
     Command *GetAutonomousCommand();
     Field2d m_Field2d;
-    Translation2d TargetTranslation{}; 
+    Translation2d targetTranslation{}; 
+    Rotation2d allianceDirection{}; 
 
 private:
     void ConfigureBindings();

@@ -31,8 +31,12 @@ void Robot::RobotPeriodic() {
         auto const allianceColor = DriverStation::GetAlliance();
         if (allianceColor) {
                 *allianceColor == DriverStation::Alliance::kRed
-                    ? m_container.TargetTranslation = Translation2d{11.915394_m, 4.033663_m} // Red alliance target position
-                    : m_container.TargetTranslation = Translation2d{4.625594_m, 4.033663_m}; // Blue alliance target position
+                    ? m_container.targetTranslation = Translation2d{11.915394_m, 4.033663_m} // Red alliance target position
+                    : m_container.targetTranslation = Translation2d{4.625594_m, 4.033663_m}; // Blue alliance target position
+                
+                *allianceColor == DriverStation::Alliance::kRed
+                    ? m_container.allianceDirection = Rotation2d{0_deg}     // Red alliance direction
+                    : m_container.allianceDirection = Rotation2d{180_deg};  // Blue alliance direction
         }
     }
 

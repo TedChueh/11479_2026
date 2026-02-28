@@ -48,6 +48,7 @@ CommandPtr ShooterSubsystem::Shooting(function<TPS()> shootTps) {
 CommandPtr ShooterSubsystem::Stop() {
   return cmd::Run(
       [this]{
+        systemStatus = false;
         DeactivateShooter();
         DeactivateSuction();
         DeactivateConveyer();

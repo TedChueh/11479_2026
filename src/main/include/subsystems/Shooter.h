@@ -23,41 +23,41 @@ using namespace ctre::phoenix6;
 using TPS = units::turns_per_second_t;
 
 class ShooterSubsystem : public SubsystemBase {
- public:
-  ShooterSubsystem(
-    int shootRightID,
-    int shootLeftID,
-    int suctionID,
-    int conveyerID,
-    DualMotorModule::Config shootConfig,
-    SingleMotorModule::Config suctionConfig,
-    SingleMotorModule::Config conveyerConfig
-  );
+  public:
+      ShooterSubsystem(
+        int shootRightID,
+        int shootLeftID,
+        int suctionID,
+        int conveyerID,
+        DualMotorModule::Config shootConfig,
+        SingleMotorModule::Config suctionConfig,
+        SingleMotorModule::Config conveyerConfig
+      );
 
-  CommandPtr Shooting(function<TPS()> shootTps);
+      CommandPtr Shooting(function<TPS()> shootTps);
 
-  CommandPtr Stop();
+      CommandPtr Stop();
 
-  void ActivateShooter(TPS tps);
+      void ActivateShooter(TPS tps);
 
-  void ActivateSuction(TPS tps);
-  
-  void ActivateConveyer(TPS tps);
-  
-  void DeactivateShooter();
-  
-  void DeactivateSuction();
-  
-  void DeactivateConveyer();
+      void ActivateSuction(TPS tps);
+      
+      void ActivateConveyer(TPS tps);
+      
+      void DeactivateShooter();
+      
+      void DeactivateSuction();
+      
+      void DeactivateConveyer();
 
-//   /**
-//    * Will be called periodically whenever the CommandScheduler runs.
-//    */
-//   void Periodic() override;
+      void Periodic() override;
 
- private:
-  Timer m_timer; 
-  DualMotorModule shootModule;
-  SingleMotorModule suctionModule;
-  SingleMotorModule conveyerModule;
+
+  private:
+      Timer m_timer; 
+      DualMotorModule shootModule;
+      SingleMotorModule suctionModule;
+      SingleMotorModule conveyerModule;
+
+      bool status = false;
 };

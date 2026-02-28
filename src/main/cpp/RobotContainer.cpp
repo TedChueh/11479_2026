@@ -12,9 +12,10 @@
 #include "utils/math_utils.h"
 
 RobotContainer::RobotContainer()
-{
-    pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(4_s));
-    autoChooser = pathplanner::AutoBuilder::buildAutoChooser("Tests");
+{ 
+    pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(6_s));
+    pathplanner::NamedCommands::registerCommand("IntakeStop", intake.Stop() );
+    autoChooser = pathplanner::AutoBuilder::buildAutoChooser();
     SmartDashboard::PutData("Auto Mode", &autoChooser);
     Shuffleboard::GetTab("Field").Add("Field", m_Field2d).WithSize(6, 4);
 

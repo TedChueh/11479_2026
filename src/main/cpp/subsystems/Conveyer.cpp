@@ -10,20 +10,17 @@ ConveyerSubsystem::ConveyerSubsystem(
   DualMotorModule::Config conveyerConfig
 ): conveyerModule{conveyerRightID, conveyerLeftID, conveyerConfig} {}
 
-CommandPtr ConveyerSubsystem::Conveying() {
+CommandPtr ConveyerSubsystem::Conveying(function<bool()> status) {
   return cmd::Run(
-      [this]{
-        systemStatus = true;
-        ActivateConveyer(20_tps);
-      },{this}
-  );
-}
-
-CommandPtr ConveyerSubsystem::Stop() {
-  return cmd::Run(
-      [this]{
-        systemStatus = false;
-        DeactivateConveyer();
+      [this, status]{
+        systemStatus = status();
+        
+        if (systemStatus) {
+          ActivateConveyer(20_tps);
+        }
+        else {
+          DeactivateConveyer();
+        }
       },{this}
   );
 }

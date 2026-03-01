@@ -65,6 +65,10 @@ void ShooterSubsystem::DeactivateSuction() {
   suctionModule.motor.SetControl(controls::NeutralOut{});
 }
 
+bool ShooterSubsystem::isActive() const {
+  return systemStatus;
+}
+
 void ShooterSubsystem::Periodic() {
    SmartDashboard::PutBoolean("Shooter Status", systemStatus);
 } 

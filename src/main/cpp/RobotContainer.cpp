@@ -13,7 +13,7 @@
 
 RobotContainer::RobotContainer()
 { 
-    pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).AlongWith(conveyer.Conveying()).WithTimeout(6_s));
+    pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(6_s));
     pathplanner::NamedCommands::registerCommand("IntakeStop", intake.StopIntaking() );
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser();
     SmartDashboard::PutData("Auto Mode", &autoChooser);
@@ -33,7 +33,7 @@ void RobotContainer::ConfigureBindings()
         })
     );
     conveyer.SetDefaultCommand(
-        conveyer.Stop()
+        conveyer.Conveying([this] { return intake.isIntakeActive() || shooter.isActive(); })
     );
     intake.SetDefaultCommand(
         intake.StopIntaking()
@@ -71,19 +71,19 @@ void RobotContainer::ConfigureBindings()
     joystick.RightTrigger().WhileTrue(
         shooter.Shooting([this] { 
             return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 1.0).tps;
-        }).AlongWith(conveyer.Conveying())
+        })
     );
 
    joystick.RightBumper().WhileTrue(
         shooter.Shooting([] { 
             return 60_tps; 
-        }).AlongWith(conveyer.Conveying())
+        })
     );
 
     joystick.LeftTrigger().ToggleOnTrue(
         intake.Intaking([] { 
             return 30_tps; 
-        }).AlongWith(conveyer.Conveying())
+        })
     );
 
     joystick.B().OnTrue(

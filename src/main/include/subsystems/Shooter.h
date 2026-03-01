@@ -33,19 +33,14 @@ class ShooterSubsystem : public SubsystemBase {
       );
 
       CommandPtr Shooting(function<TPS()> shootTps);
-
       CommandPtr Stop();
 
       void ActivateShooter(TPS tps);
-
-      void ActivateSuction(TPS tps);
-            
+      void ActivateSuction(TPS tps);  
       void DeactivateShooter();
-      
       void DeactivateSuction();
-    
+      bool isActive() const;
       void Periodic() override;
-
 
   private:
       Timer m_timer; 

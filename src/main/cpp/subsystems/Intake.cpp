@@ -73,6 +73,10 @@ void IntakeSubsystem::LiftByTurns(Turn turns) {
   fmt::print("pressed  s1={}  s2={}\n", s1.GetName(), s2.GetName());
 }
 
+bool IntakeSubsystem::isIntakeActive() const {
+  return intakeStatus;
+}
+
 void IntakeSubsystem::Periodic() {
     SmartDashboard::PutBoolean("Intake Status", intakeStatus);
     SmartDashboard::PutString("Arm Status", armStatus ? "Lifting↑" : "Lowering↓"  );

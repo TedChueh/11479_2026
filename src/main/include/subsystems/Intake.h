@@ -42,8 +42,9 @@ class IntakeSubsystem : public SubsystemBase {
         void ActivateIntake(TPS tps);
         void DeactivateIntake();
         void LiftByTurns(Turn turns);
-        
+        bool isIntakeActive() const;
         void Periodic() override;
+
     private:
         DualMotorModule intakeModule;
         DualMotorModule armModule;

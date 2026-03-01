@@ -29,6 +29,14 @@ CommandPtr IntakeSubsystem::StopIntaking() {
   );
 }
 
+CommandPtr IntakeSubsystem::ManualArmControl(function<double()> joystickValue) {
+  return cmd::Run(
+      [this, joystickValue] {
+        LiftByOpenLoop(joystickValue());
+      },{this}
+  );
+}
+
 CommandPtr IntakeSubsystem::Lifting() {
   return cmd::RunOnce(
       [this] {
@@ -71,6 +79,11 @@ void IntakeSubsystem::LiftByTurns(Turn turns) {
   auto s1 = armModule.motorLeft.SetControl(armModule.motionMagicControl.WithPosition(leftTarget));
   auto s2 = armModule.motorRight.SetControl(armModule.motionMagicControl.WithPosition(rightTarget));
   fmt::print("pressed  s1={}  s2={}\n", s1.GetName(), s2.GetName());
+}
+
+void IntakeSubsystem::LiftByOpenLoop(double dutyPercentage) {
+  armModule.motorLeft.SetControl(armModule.dutyCycleControl.WithOutput(dutyPercentage));
+  armModule.motorRight.SetControl(armModule.dutyCycleControl.WithOutput(dutyPercentage));
 }
 
 bool IntakeSubsystem::isIntakeActive() const {

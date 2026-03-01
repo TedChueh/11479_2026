@@ -36,12 +36,14 @@ class IntakeSubsystem : public SubsystemBase {
 
         CommandPtr Intaking(function<TPS()> intakeTps);
         CommandPtr StopIntaking();
+        CommandPtr ManualArmControl(function<double()> joystickValue);
         CommandPtr Lifting();
         CommandPtr Lowering();
 
         void ActivateIntake(TPS tps);
         void DeactivateIntake();
         void LiftByTurns(Turn turns);
+        void LiftByOpenLoop(double dutyPercentage);
         bool isIntakeActive() const;
         void Periodic() override;
 

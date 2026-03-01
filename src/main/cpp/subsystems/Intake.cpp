@@ -20,20 +20,29 @@ CommandPtr IntakeSubsystem::Intaking(function<TPS()> intakeTps) {
   );
 }
 
-CommandPtr IntakeSubsystem::Lifting(Turn turns) {
-  return cmd::RunOnce(
-      [this, turns] {
-        armStatus = true;
-        LiftByTurns(turns);
-      },{this}
-  );
-}
-
-CommandPtr IntakeSubsystem::Stop() {
+CommandPtr IntakeSubsystem::StopIntaking() {
   return cmd::Run(
       [this] {
         intakeStatus = false;
         DeactivateIntake();
+      },{this}
+  );
+}
+
+CommandPtr IntakeSubsystem::Lifting() {
+  return cmd::RunOnce(
+      [this] {
+        armStatus = true;
+        LiftByTurns(20_tr);
+      },{this}
+  );
+}
+
+CommandPtr IntakeSubsystem::Lowering() {
+  return cmd::RunOnce(
+      [this] {
+        armStatus = false;
+        LiftByTurns(-20_tr);
       },{this}
   );
 }

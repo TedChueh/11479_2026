@@ -35,8 +35,9 @@ class IntakeSubsystem : public SubsystemBase {
         );
 
         CommandPtr Intaking(function<TPS()> intakeTps);
-        CommandPtr Lifting(Turn turns);
-        CommandPtr Stop();
+        CommandPtr StopIntaking();
+        CommandPtr Lifting();
+        CommandPtr Lowering();
 
         void ActivateIntake(TPS tps);
         void DeactivateIntake();

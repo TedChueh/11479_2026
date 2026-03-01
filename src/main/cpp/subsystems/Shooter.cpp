@@ -18,23 +18,19 @@ CommandPtr ShooterSubsystem::Shooting(function<TPS()> shootTps) {
       [this, shootTps] {
           TPS currentTps = shootTps();
 
-          if (currentTps < 20_tps) {
+          if (currentTps < 0_tps || currentTps > 100_tps) {
               systemStatus = false;
               DeactivateShooter();
               DeactivateSuction();
               DeactivateConveyer();
-
-              SmartDashboard::PutString("Shooter Alert", "RPM too low, stopping operation");
           } 
           else {
               systemStatus = true;
               ActivateShooter(currentTps);  
               if (m_timer.HasElapsed(0.5_s)) {
-                  ActivateSuction(20_tps);
-                  ActivateConveyer(20_tps);
+                  ActivateSuction(currentTps * 0.6);
+                  ActivateConveyer(currentTps * 0.2);
               }
-
-              SmartDashboard::PutString("Shooter Alert", "");
           }
       },{this}
   ).BeforeStarting(

@@ -14,7 +14,7 @@
 RobotContainer::RobotContainer()
 { 
     pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(6_s));
-    pathplanner::NamedCommands::registerCommand("IntakeStop", intake.Stop() );
+    pathplanner::NamedCommands::registerCommand("IntakeStop", intake.StopIntaking() );
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser();
     SmartDashboard::PutData("Auto Mode", &autoChooser);
     Shuffleboard::GetTab("Field").Add("Field", m_Field2d).WithSize(6, 4);
@@ -36,7 +36,7 @@ void RobotContainer::ConfigureBindings()
         shooter.Stop()
     );
     intake.SetDefaultCommand(
-        intake.Stop()
+        intake.StopIntaking()
     );
 
     // Disable Mode Trigger
@@ -48,10 +48,10 @@ void RobotContainer::ConfigureBindings()
 
     // Teleop Mode Trigger
     RobotModeTriggers::Teleop().OnTrue(
-        intake.Lifting(20_tr)
+        intake.Lifting()
     );
     RobotModeTriggers::Teleop().OnFalse(
-        intake.Stop()
+        intake.StopIntaking()
     );
     
     // Joystick Binding
@@ -91,11 +91,11 @@ void RobotContainer::ConfigureBindings()
     );
 
     joystick.B().OnTrue(
-        intake.Lifting(20_tr)
+        intake.Lifting()
     );
 
     joystick.A().OnTrue(
-        intake.Lifting(-20_tr)
+        intake.Lowering()
     );
 
 

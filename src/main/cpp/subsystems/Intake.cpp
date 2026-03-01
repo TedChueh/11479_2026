@@ -70,6 +70,6 @@ void IntakeSubsystem::LiftByTurns(Turn turns) {
 }
 
 void IntakeSubsystem::Periodic() {
-    SmartDashboard::PutString("Intake Status", intakeStatus == true ? "Lifting↑" : "Lowering↓");
-    SmartDashboard::PutBoolean("Arm Status", armStatus);
+    SmartDashboard::PutBoolean("Intake Status", intakeStatus);
+    SmartDashboard::PutString("Arm Status", armStatus ? "Lifting↑" : "Lowering↓"  );
 }

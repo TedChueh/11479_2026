@@ -48,14 +48,6 @@ void RobotContainer::ConfigureBindings()
             return swerve::requests::Idle{};
         }).IgnoringDisable(true)
     );
-
-    // Teleop Mode Trigger
-    RobotModeTriggers::Teleop().OnTrue(
-        intake.Lifting()
-    );
-    RobotModeTriggers::Teleop().OnFalse(
-        intake.StopIntaking()
-    );
     
     // Joystick Binding
     joystick.Y().WhileTrue(

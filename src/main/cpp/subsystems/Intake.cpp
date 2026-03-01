@@ -32,8 +32,10 @@ CommandPtr IntakeSubsystem::StopIntaking() {
 CommandPtr IntakeSubsystem::Lifting() {
   return cmd::RunOnce(
       [this] {
-        armStatus = true;
-        LiftByTurns(20_tr);
+        if(!armStatus) {
+          armStatus = true;
+          LiftByTurns(20_tr);
+        }
       },{this}
   );
 }
@@ -41,8 +43,10 @@ CommandPtr IntakeSubsystem::Lifting() {
 CommandPtr IntakeSubsystem::Lowering() {
   return cmd::RunOnce(
       [this] {
-        armStatus = false;
-        LiftByTurns(-20_tr);
+        if(armStatus) {
+          armStatus = false;
+          LiftByTurns(-20_tr);
+        }
       },{this}
   );
 }

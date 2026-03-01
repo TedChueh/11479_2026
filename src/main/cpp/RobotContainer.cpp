@@ -48,6 +48,11 @@ void RobotContainer::ConfigureBindings()
             return swerve::requests::Idle{};
         }).IgnoringDisable(true)
     );
+
+    // Test Mode Trigger
+    RobotModeTriggers::Test().WhileTrue(
+        intake.ManualArmControl([this] { return -joystick.GetRightY(); })
+    );
     
     // Joystick Binding
     joystick.Y().WhileTrue(

@@ -62,12 +62,6 @@ void Robot::RobotPeriodic() {
     }
 }
 
-// void Robot::DisabledInit() {}
-
-// void Robot::DisabledPeriodic() {}
-
-// void Robot::DisabledExit() {}
-
 void Robot::AutonomousInit() {
     m_autonomousCommand = m_container.GetAutonomousCommand();
 
@@ -93,10 +87,6 @@ void Robot::TeleopExit() {}
 // void Robot::TestInit() {
 //     frc2::CommandScheduler::GetInstance().CancelAll();
 // }
-
-// void Robot::TestPeriodic() {}
-
-// void Robot::TestExit() {}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {

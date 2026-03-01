@@ -28,10 +28,8 @@ class ShooterSubsystem : public SubsystemBase {
         int shootRightID,
         int shootLeftID,
         int suctionID,
-        int conveyerID,
         DualMotorModule::Config shootConfig,
-        SingleMotorModule::Config suctionConfig,
-        SingleMotorModule::Config conveyerConfig
+        SingleMotorModule::Config suctionConfig
       );
 
       CommandPtr Shooting(function<TPS()> shootTps);
@@ -41,15 +39,11 @@ class ShooterSubsystem : public SubsystemBase {
       void ActivateShooter(TPS tps);
 
       void ActivateSuction(TPS tps);
-      
-      void ActivateConveyer(TPS tps);
-      
+            
       void DeactivateShooter();
       
       void DeactivateSuction();
-      
-      void DeactivateConveyer();
-
+    
       void Periodic() override;
 
 
@@ -57,7 +51,6 @@ class ShooterSubsystem : public SubsystemBase {
       Timer m_timer; 
       DualMotorModule shootModule;
       SingleMotorModule suctionModule;
-      SingleMotorModule conveyerModule;
 
       bool systemStatus = false;
 };

@@ -64,6 +64,23 @@ private:
     void ConfigureBindings();
     void TestBindings();
 
+    ConveyerSubsystem conveyer{
+        55, 56,
+        DualMotorModule::Config{
+            .motorRightInvert = false,
+            .motorLeftInvert = true,
+            .kS = 0.55,
+            .kV = 0.11,
+            .kA = 0.0,
+            .kP = 0,
+            .kI = 0,
+            .kD = 0,
+            .PeakVoltage = 12_V,
+            .PeakCurrent = 40_A,
+            .RampPeriod = 0.5_s
+        }
+    };
+
     IntakeSubsystem intake{
         1, 2,
         61, 62,
@@ -100,7 +117,6 @@ private:
     ShooterSubsystem shooter{
         51, 52,
         54,
-        55,
         DualMotorModule::Config{
             .motorRightInvert = false,
             .motorLeftInvert = true,
@@ -120,18 +136,6 @@ private:
             .kV = 0.11,
             .kA = 0.0,
             .kP = 0.01,
-            .kI = 0,
-            .kD = 0,
-            .PeakVoltage = 12_V,
-            .PeakCurrent = 40_A,
-            .RampPeriod = 0.5_s
-        },
-        SingleMotorModule::Config{
-            .motorInvert = false,
-            .kS = 0.55,
-            .kV = 0.11,
-            .kA = 0.0,
-            .kP = 0.,
             .kI = 0,
             .kD = 0,
             .PeakVoltage = 12_V,

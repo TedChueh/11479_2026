@@ -60,7 +60,7 @@ void RobotContainer::ConfigureBindings()
             return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) 
                 .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) 
                 .WithTargetDirection(drivetrain.GetState().Pose.Rotation() + 
-                 calcHeadingError(targetTranslation , drivetrain.GetState())+ calcVelocityCompAngle(degree_t(61.32), meter_t(1.33), targetTranslation, drivetrain.GetState()));
+                 calcHeadingError(targetTranslation , drivetrain.GetState()));
         })
     );
 
@@ -74,7 +74,7 @@ void RobotContainer::ConfigureBindings()
 
     joystick.RightTrigger().WhileTrue(
         shooter.Shooting([this] { 
-            return getTPSFromDistance(calcRelativeDistanceToTarget(targetTranslation, drivetrain.GetState().Pose.Translation()), 24.375, 12.5); 
+            return 60_tps;
         })
     );
 

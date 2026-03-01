@@ -18,9 +18,16 @@ using TPS = turns_per_second_t;
 
 constexpr acceleration::meters_per_second_squared_t g_accel = 9.80665_mps_sq;
 
-Rotation2d calcHeadingError(Translation2d targetPosition, const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState);
-double calcRelativeDistanceToTarget(Translation2d targetPosition, Translation2d referencePosition);
-TPS getTPSFromDistance(double distance, double y_intercept, double slope);
-Rotation2d calcVelocityCompAngle(degree_t shootDegree, meter_t deltaHeight, Translation2d targetPosition, const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState);
+struct ShootCompOutput {
+    Rotation2d compAngle;    
+    TPS tps;              
+};
 
+Rotation2d calcHeadingError(Translation2d targetPosition, const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState);
+ShootCompOutput calcShootComp(degree_t shootDegree,
+                              meter_t deltaHeight,
+                              Translation2d targetPosition,
+                              const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState,
+                              double wheelRadius_m,   
+                              double kMultiplier = 1.0);
 #endif 

@@ -30,7 +30,7 @@ class ConveyerSubsystem : public SubsystemBase {
         DualMotorModule::Config conveyerConfig
       );
 
-      CommandPtr Convey();
+      CommandPtr Conveying();
 
       CommandPtr Stop();
       

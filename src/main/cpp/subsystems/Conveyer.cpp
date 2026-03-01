@@ -10,7 +10,7 @@ ConveyerSubsystem::ConveyerSubsystem(
   DualMotorModule::Config conveyerConfig
 ): conveyerModule{conveyerRightID, conveyerLeftID, conveyerConfig} {}
 
-CommandPtr ConveyerSubsystem::Convey() {
+CommandPtr ConveyerSubsystem::Conveying() {
   return cmd::Run(
       [this]{
         systemStatus = true;

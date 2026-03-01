@@ -13,7 +13,7 @@
 
 RobotContainer::RobotContainer()
 { 
-    pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).WithTimeout(6_s));
+    pathplanner::NamedCommands::registerCommand("Shooting", shooter.Shooting([] { return 60_tps; }).AlongWith(conveyer.Conveying()).WithTimeout(6_s));
     pathplanner::NamedCommands::registerCommand("IntakeStop", intake.StopIntaking() );
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser();
     SmartDashboard::PutData("Auto Mode", &autoChooser);
@@ -32,11 +32,17 @@ void RobotContainer::ConfigureBindings()
                 .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate);               // Drive counterclockwise with negative X (left)
         })
     );
-    shooter.SetDefaultCommand(
-        shooter.Stop()
+
+    conveyer.SetDefaultCommand(
+        conveyer.Stop()
     );
+    
     intake.SetDefaultCommand(
         intake.StopIntaking()
+    );
+
+    shooter.SetDefaultCommand(
+        shooter.Stop()
     );
 
     // Disable Mode Trigger
@@ -75,19 +81,19 @@ void RobotContainer::ConfigureBindings()
     joystick.RightTrigger().WhileTrue(
         shooter.Shooting([this] { 
             return 60_tps;
-        })
+        }).AlongWith(conveyer.Conveying())
     );
 
    joystick.RightBumper().WhileTrue(
         shooter.Shooting([] { 
             return 60_tps; 
-        })
+        }).AlongWith(conveyer.Conveying())
     );
 
     joystick.LeftTrigger().ToggleOnTrue(
         intake.Intaking([] { 
             return 30_tps; 
-        })
+        }).AlongWith(conveyer.Conveying())
     );
 
     joystick.B().OnTrue(

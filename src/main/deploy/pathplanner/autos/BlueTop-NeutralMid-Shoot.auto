@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueTop_NeutralTop"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NeutralTop-NeutralMid"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NetrualMid-BlueTop"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "BlueTop-ShootingTop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootingTop-NeturalMid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NeutralMid-ShootingTop"
           }
         },
         {

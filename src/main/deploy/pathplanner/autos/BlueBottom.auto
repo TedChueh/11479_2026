@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueTop_NeutralTop"
+            "pathName": "BlueBottom-ShootingBottom"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooting"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NeutralTop-NeutralBottom"
+            "pathName": "ShootingBottom-NeutralMid"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NetrualBottom-ShootingBottom"
+            "pathName": "NeutralMid-ShootingBottom"
           }
         },
         {

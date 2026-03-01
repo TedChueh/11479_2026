@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMid-ShootingMid"
+            "pathName": "BlueMid-ShootMid"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootingTop-NeturalMid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NeutralMid-ShootingTop"
           }
         }
       ]

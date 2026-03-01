@@ -32,15 +32,12 @@ void RobotContainer::ConfigureBindings()
                 .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate);               // Drive counterclockwise with negative X (left)
         })
     );
-
     conveyer.SetDefaultCommand(
         conveyer.Stop()
     );
-    
     intake.SetDefaultCommand(
         intake.StopIntaking()
     );
-
     shooter.SetDefaultCommand(
         shooter.Stop()
     );

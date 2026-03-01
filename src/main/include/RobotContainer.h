@@ -11,6 +11,7 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "subsystems/CommandSwerveDrivetrain.h"
+#include "subsystems/Conveyer.h"
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Vision.h"

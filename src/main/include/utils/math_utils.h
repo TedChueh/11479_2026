@@ -28,6 +28,6 @@ ShootCompOutput calcShootComp(degree_t shootDegree,
                               meter_t deltaHeight,
                               Translation2d targetPosition,
                               const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState,
-                              double wheelRadius_m,   
+                              meter_t wheelRadius_m,   
                               double kMultiplier = 1.0);
 #endif 

@@ -77,7 +77,7 @@ void RobotContainer::ConfigureBindings()
 
     joystick.RightTrigger().WhileTrue(
         shooter.Shooting([this] { 
-            return 60_tps;
+            return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 1.0).tps;
         }).AlongWith(conveyer.Conveying())
     );
 

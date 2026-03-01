@@ -17,7 +17,7 @@ ShootCompOutput calcShootComp(degree_t shootDegree,
                               meter_t deltaHeight,
                               Translation2d targetPosition,
                               const impl::SwerveDrivetrainImpl::SwerveDriveState& robotState,
-                              double wheelRadius_m,   
+                              meter_t wheelRadius_m,   
                               double kMultiplier) 
 {
     Translation2d robotPosition = robotState.Pose.Translation();
@@ -43,7 +43,7 @@ ShootCompOutput calcShootComp(degree_t shootDegree,
     double vForward = robotVelocity.vx.value() * ux + robotVelocity.vy.value() * uy;
     double v_comp = desiredVx.value() - vForward;
 
-    TPS tps = 1_tps * (v_comp / (2.0 * M_PI * wheelRadius_m)) * kMultiplier;
+    TPS tps = 1_tps * (v_comp / (2.0 * M_PI * wheelRadius_m.value())) * kMultiplier;
 
     double TVcrossRVV = targetVector.X().value() * robotVelocity.vy.value() -
                         targetVector.Y().value() * robotVelocity.vx.value();

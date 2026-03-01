@@ -36,6 +36,7 @@ class SingleMotorModule {
   );               
 
   static constexpr CANBus kCANBus = CANBus::RoboRIO();
+  controls::DutyCycleOut       dutyCycleControl{0.0};
   controls::VelocityVoltage    velocityControl    = controls::VelocityVoltage{0_tps}.WithSlot(0);
   controls::MotionMagicVoltage motionMagicControl = controls::MotionMagicVoltage{0_tr}.WithSlot(0);
   controls::NeutralOut brake{};

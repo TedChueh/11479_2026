@@ -60,6 +60,8 @@ public:
     Pose2d resetPose{};
     Translation2d targetTranslation{}; 
     Rotation2d allianceDirection{}; 
+    Rotation2d targetDirection{}; 
+
 
 private:
     void ConfigureBindings();

@@ -51,6 +51,10 @@ ShootCompOutput calcShootComp(degree_t shootDegree,
 
     double compAngleRad = atan2(tangentialSpeed, v_comp);
 
+
+    SmartDashboard::PutNumber("Shooter TPS", tps.value());
+
+        
     if(tps < 0_tps) {
         SmartDashboard::PutString("Velocity Comp Angle Warning⚠️: ", "TPS < 0");
         return ShootCompOutput{Rotation2d(0_rad), 0.0_tps};

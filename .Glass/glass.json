@@ -1,26 +1,10 @@
 {
   "NetworkTables": {
     "transitory": {
-      "DriveState": {
-        "open": true
-      },
-      "FMSInfo": {
-        "open": true
-      },
-      "LiveWindow": {
-        "open": true
-      },
-      "PathPlanner": {
-        "open": true
-      },
-      "Shuffleboard": {
-        "open": true
-      },
       "SmartDashboard": {
         "Auto Mode": {
           "open": true
-        },
-        "open": true
+        }
       },
       "limelight": {
         "open": true

@@ -57,25 +57,26 @@ void RobotContainer::ConfigureBindings()
     // Joystick Binding
     joystick.Y().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
-            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) 
+            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed * 0.6) 
                 .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) 
                 .WithTargetDirection(drivetrain.GetState().Pose.Rotation() + 
-                 calcHeadingError(targetTranslation , drivetrain.GetState()) + 
-                 calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 1.0).compAngle);
+                calcHeadingError(targetTranslation , drivetrain.GetState()) + 
+                targetDirection +
+                calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 1.0).compAngle);
         })
     );
 
     joystick.X().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
             return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) 
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) 
-                .WithTargetDirection(allianceDirection);
+                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed)  
+                .WithTargetDirection(Rotation2d(180_deg));
         })
     );
 
     joystick.RightTrigger().WhileTrue(
         shooter.Shooting([this] { 
-            return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 1.0).tps;
+            return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 6.5).tps;
         })
     );
 
@@ -99,7 +100,6 @@ void RobotContainer::ConfigureBindings()
         intake.Lowering()
     );
 
-
     joystick.LeftBumper().OnTrue(
         drivetrain.RunOnce([this] { 
             drivetrain.SeedFieldCentric(); 
@@ -115,7 +115,7 @@ void RobotContainer::ConfigureBindings()
     // Register Telemetry
     drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
 }
-
+  
 void RobotContainer::TestBindings(){
 
     joystick.POVUp().WhileTrue(

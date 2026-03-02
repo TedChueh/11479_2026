@@ -40,4 +40,5 @@ public:
 
 private:
     optional<VisionMeasurement> m_measurement;
+    second_t lastVisionUpdate = 0_s;
 };

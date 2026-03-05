@@ -24,14 +24,8 @@ void VisionSubsystem::PeriodicUpdate(const Pose2d& robotPose, const meters_per_s
     second_t currentTimestamp = second_t(llMeasurement->timestampSeconds);
 
     // Prevent time from going backward or from being outdated
-    if (currentTimestamp < lastVisionUpdate || currentTimestamp - lastVisionUpdate > 1_s) {
+    if (currentTimestamp <= lastVisionUpdate || currentTimestamp - lastVisionUpdate > 0.1_s) {
         lastVisionUpdate = currentTimestamp;
-        m_measurement.reset();
-        return;
-    }
-
-    // Update rate limit: at least 50ms between updates to prevent flooding the system with too much data
-    if (currentTimestamp - lastVisionUpdate < 0.05_s) {
         m_measurement.reset();
         return;
     }
@@ -42,14 +36,14 @@ void VisionSubsystem::PeriodicUpdate(const Pose2d& robotPose, const meters_per_s
     int tagCount = llMeasurement->tagCount;
 
     // A. Distance filtering
-    if (meter_t{dist} > 3.5_m) {
+    if (meter_t{dist} > 4.5_m) {
         m_measurement.reset();
         return;
     }
 
     // B. Velocity filtering
     bool isAuto = DriverStation::IsAutonomous();
-    meters_per_second_t maxSpeed = isAuto ? 1_mps : 2.0_mps; 
+    meters_per_second_t maxSpeed = isAuto ? 3.0_mps : 4.0_mps; 
     if (translationSpeed > maxSpeed || math::abs(angularVelocity) > 360_deg_per_s) {
         m_measurement.reset();
         return;

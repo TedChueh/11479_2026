@@ -42,7 +42,7 @@ CommandPtr IntakeSubsystem::Lifting() {
       [this] {
         if(!armStatus) {
           armStatus = true;
-          LiftByTurns(100_tr);
+          LiftByTurns(113_tr);
         }
       },{this}
   );
@@ -53,7 +53,7 @@ CommandPtr IntakeSubsystem::Lowering() {
       [this] {
         if(armStatus) {
           armStatus = false;
-          LiftByTurns(-100_tr);
+          LiftByTurns(-113_tr);
         }
       },{this}
   );

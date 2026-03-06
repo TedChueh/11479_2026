@@ -59,7 +59,7 @@ void RobotContainer::ConfigureBindings()
 
     // Test Mode Trigger
     RobotModeTriggers::Test().WhileTrue(
-        intake.ManualArmControl([this] { return -joystick.GetRightY(); })
+        intake.ManualArmControl([this] { return -joystick.GetRightY() * 0.2; })
     );
     
     // Joystick Binding

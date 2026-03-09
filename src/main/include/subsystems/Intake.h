@@ -45,6 +45,7 @@ class IntakeSubsystem : public SubsystemBase {
         void LiftByTurns(Turn turns);
         void LiftByOpenLoop(double dutyPercentage);
         bool isIntakeActive() const;
+        bool isArmActive();
         void Periodic() override;
 
     private:

@@ -40,7 +40,7 @@ CommandPtr IntakeSubsystem::ManualArmControl(function<double()> joystickValue) {
 CommandPtr IntakeSubsystem::Lifting() {
   return cmd::RunOnce(
       [this] {
-        if(!armStatus) {
+        if(!armStatus && !isArmActive()) {
           armStatus = true;
           LiftByTurns(113_tr);
         }
@@ -51,7 +51,7 @@ CommandPtr IntakeSubsystem::Lifting() {
 CommandPtr IntakeSubsystem::Lowering() {
   return cmd::RunOnce(
       [this] {
-        if(armStatus) {
+        if(armStatus && !isArmActive()) {
           armStatus = false;
           LiftByTurns(-113_tr);
         }
@@ -76,9 +76,8 @@ void IntakeSubsystem::LiftByTurns(Turn turns) {
   Turn leftTarget  = leftPos  - turns;
   Turn rightTarget = rightPos - turns;
 
-  auto s1 = armModule.motorLeft.SetControl(armModule.motionMagicControl.WithPosition(leftTarget));
-  auto s2 = armModule.motorRight.SetControl(armModule.motionMagicControl.WithPosition(rightTarget));
-  fmt::print("pressed  s1={}  s2={}\n", s1.GetName(), s2.GetName());
+  armModule.motorLeft.SetControl(armModule.motionMagicControl.WithPosition(leftTarget));
+  armModule.motorRight.SetControl(armModule.motionMagicControl.WithPosition(rightTarget));
 }
 
 void IntakeSubsystem::LiftByOpenLoop(double dutyPercentage) {
@@ -88,6 +87,10 @@ void IntakeSubsystem::LiftByOpenLoop(double dutyPercentage) {
 
 bool IntakeSubsystem::isIntakeActive() const {
   return intakeStatus;
+}
+
+bool IntakeSubsystem::isArmActive() {
+  return (armModule.motorLeft.GetMotionMagicAtTarget().GetValue() && armModule.motorRight.GetMotionMagicAtTarget().GetValue());
 }
 
 void IntakeSubsystem::Periodic() {

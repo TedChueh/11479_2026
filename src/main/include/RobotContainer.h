@@ -8,6 +8,7 @@
 #include <frc/smartdashboard/Field2d.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc/filter/SlewRateLimiter.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "subsystems/CommandSwerveDrivetrain.h"
@@ -30,15 +31,15 @@ private:
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     swerve::requests::FieldCentric FieldCentric_Manualdrive = swerve::requests::FieldCentric{}
-        .WithDeadband(MaxSpeed * 0.05).WithRotationalDeadband(MaxAngularRate * 0.05) // Add a 5% deadband
+        .WithDeadband(MaxSpeed * 0.04).WithRotationalDeadband(MaxAngularRate * 0.04) // Add a 4% deadband
         .WithDriveRequestType(swerve::DriveRequestType::Velocity); // Use open-loop control for drive motors
     swerve::requests::SwerveDriveBrake brake{};
     swerve::requests::PointWheelsAt point{};
     swerve::requests::RobotCentric forwardStraight = swerve::requests::RobotCentric{}
         .WithDriveRequestType(swerve::DriveRequestType::Velocity);
     swerve::requests::FieldCentricFacingAngle FieldCentricFacingAngle_Manualdrive = swerve::requests::FieldCentricFacingAngle{}
-        .WithDeadband(MaxSpeed * 0.05).WithRotationalDeadband(MaxAngularRate * 0.05) // Add a 5% deadband
-        .WithDriveRequestType(swerve::DriveRequestType::Velocity).WithHeadingPID(5, 0, 0); // Use open-loop control for drive motors
+        .WithDeadband(MaxSpeed * 0.04).WithRotationalDeadband(MaxAngularRate * 0.04) // Add a 4% deadband
+        .WithDriveRequestType(swerve::DriveRequestType::Velocity).WithHeadingPID(2.25, 0, 0); // Use open-loop control for drive motors
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */
@@ -54,6 +55,9 @@ public:
 private:
     /* Path follower */
     SendableChooser<Command *> autoChooser;
+    SlewRateLimiter<scalar> xlimiter{3 / 1_s};
+    SlewRateLimiter<scalar> ylimiter{3 / 1_s};
+    SlewRateLimiter<scalar> rotlimiter{2 / 1_s};
 
 public:
     RobotContainer();
@@ -127,7 +131,7 @@ private:
             .kS = 0.19,
             .kV = 0.111,
             .kA = 0.0,
-            .kP = 0.015,
+            .kP = 0.15,
             .kI = 0,
             .kD = 0,
             .PeakVoltage = 12_V,

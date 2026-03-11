@@ -59,3 +59,7 @@ ShootCompOutput calcShootComp(degree_t shootDegree, meter_t deltaHeight, Transla
         return ShootCompOutput{Rotation2d(radian_t(compAngleRad)), tps};
     }
 }
+
+double squareInput(double value) {
+    return copysign(value * value, value);
+}

@@ -25,7 +25,7 @@ CommandPtr ShooterSubsystem::Shooting(function<TPS()> shootTps) {
           else {
               systemStatus = true;
               ActivateShooter(currentTps);  
-              if (m_timer.HasElapsed(0.5_s)) {
+              if (m_timer.HasElapsed(0.8_s)) {
                   ActivateSuction(currentTps * 0.6);
               }
           }

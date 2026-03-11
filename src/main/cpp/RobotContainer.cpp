@@ -33,9 +33,9 @@ void RobotContainer::ConfigureBindings()
     // Subsystem Default Command
     drivetrain.SetDefaultCommand(
         drivetrain.ApplyRequest([this]() -> auto&& {
-            return FieldCentric_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed)                            // Drive left with negative X (left)
-                .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate);               // Drive counterclockwise with negative X (left)
+            return FieldCentric_Manualdrive.WithVelocityX(xlimiter.Calculate(scalar_t{-joystick.GetLeftY()}) * MaxSpeed) // Drive forward with negative Y (forward)
+                .WithVelocityY(ylimiter.Calculate(scalar_t{-joystick.GetLeftX()}) * MaxSpeed)                            // Drive left with negative X (left)
+                .WithRotationalRate(rotlimiter.Calculate(scalar_t{-joystick.GetRightX()}) * MaxAngularRate);               // Drive counterclockwise with negative X (left)
         })
     );
     conveyer.SetDefaultCommand(
@@ -63,26 +63,29 @@ void RobotContainer::ConfigureBindings()
     // Joystick Binding
     joystick.Y().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
-            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed * 0.4) 
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed * 0.4) 
+            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(xlimiter.Calculate(scalar_t{-joystick.GetLeftY()}) * MaxSpeed * 0.4) 
+                .WithVelocityY(ylimiter.Calculate(scalar_t{-joystick.GetLeftX()}) * MaxSpeed * 0.4) 
                 .WithTargetDirection(drivetrain.GetState().Pose.Rotation() + 
                 mirroredOffset +
                 calcHeadingError(targetTranslation , drivetrain.GetState()) + 
-                calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 1, 1, 1, 1.2).compAngle);
+                calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 1, 1, 1, 1.3).compAngle);
         })
     );
 
     joystick.X().WhileTrue(
         drivetrain.ApplyRequest([this]() -> auto&& {
-            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) 
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed)  
+            return FieldCentricFacingAngle_Manualdrive.WithVelocityX(xlimiter.Calculate(scalar_t{-joystick.GetLeftY()}) * MaxSpeed) 
+                .WithVelocityY(ylimiter.Calculate(scalar_t{-joystick.GetLeftX()}) * MaxSpeed)  
                 .WithTargetDirection(Rotation2d(180_deg));
         })
     );
 
     joystick.RightTrigger().WhileTrue(
         shooter.Shooting([this] { 
-            return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 4, 6.3, 6, 1).tps;
+            double targetDistance = (targetTranslation.Distance(drivetrain.GetState().Pose.Translation())).value();
+            double stationaryGain = (targetDistance < (2_m).value())? 6.2 : 6.5;
+            SmartDashboard::PutNumber("stationaryGain", stationaryGain);
+            return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 3, stationaryGain, 6.5, 1).tps;
         })
     );
 

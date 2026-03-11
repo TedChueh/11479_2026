@@ -33,4 +33,6 @@ ShootCompOutput calcShootComp(degree_t shootDegree,
                               double kStationaryGain = 1.0,
                               double kRetreatGain = 1.0,
                               double kAngleGain = 1.0);
+
+double squareInput(double value);
 #endif 

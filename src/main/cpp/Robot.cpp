@@ -44,11 +44,13 @@ void Robot::RobotPeriodic() {
     auto const driveState = drivetrain.GetState();
     auto const pose = driveState.Pose;
 
+    bool isAuto = DriverStation::IsAutonomous();
+
     meters_per_second_t translationSpeed = math::hypot(driveState.Speeds.vx, driveState.Speeds.vy);
     m_container.m_Field2d.SetRobotPose(pose);
 
     if (kUseLimelight) {
-        vision2.Update(pose, translationSpeed, driveState.Speeds.omega);
+        vision2.Update(pose, translationSpeed, driveState.Speeds.omega, isAuto);
 
         if(auto meas = vision2.GetLatestUpdate()) {
             if (meas->suggestSeed){

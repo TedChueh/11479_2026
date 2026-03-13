@@ -239,7 +239,8 @@ void VisionSubsystem2::PublishRejectedTelemetry(
 void VisionSubsystem2::Update(
     const frc::Pose2d& robotPose,
     units::meters_per_second_t translationSpeed,
-    units::degrees_per_second_t angularVelocity
+    units::degrees_per_second_t angularVelocity,
+    bool isAuto
 ) {
     m_latestUpdate.reset();
 
@@ -311,7 +312,7 @@ void VisionSubsystem2::Update(
     // Consume timestamp only after validation passes
     m_lastVisionTimestamp = timestamp;
 
-    const double xyStdDev = ComputeXYStdDev(
+    double xyStdDev = ComputeXYStdDev(
         tagCount,
         avgTagDist,
         translationError,
@@ -319,6 +320,10 @@ void VisionSubsystem2::Update(
         translationSpeed,
         angularVelocity
     );
+
+    if(isAuto){
+        xyStdDev *= 1.3;
+    }
 
     const double rotStdDev = ComputeRotStdDev(
         tagCount,

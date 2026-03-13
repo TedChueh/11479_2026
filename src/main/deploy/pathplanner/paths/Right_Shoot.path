@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.805364238410595,
-        "y": 0.5574829326011161
+        "x": 7.115670529801325,
+        "y": 0.14367549668874258
       },
       "isLocked": false,
       "linkedName": "RightIntakeStopPos"
@@ -79,9 +79,9 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 270.0,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false

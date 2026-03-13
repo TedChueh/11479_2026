@@ -27,7 +27,7 @@ using namespace units;
 class RobotContainer {
 private:
     meters_per_second_t MaxSpeed = 1.0 * TunerConstants::kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
-    radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
+    radians_per_second_t MaxAngularRate = 0.9_tps; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     swerve::requests::FieldCentric FieldCentric_Manualdrive = swerve::requests::FieldCentric{}
@@ -39,7 +39,7 @@ private:
         .WithDriveRequestType(swerve::DriveRequestType::Velocity);
     swerve::requests::FieldCentricFacingAngle FieldCentricFacingAngle_Manualdrive = swerve::requests::FieldCentricFacingAngle{}
         .WithDeadband(MaxSpeed * 0.04).WithRotationalDeadband(MaxAngularRate * 0.04) // Add a 4% deadband
-        .WithDriveRequestType(swerve::DriveRequestType::Velocity).WithHeadingPID(2.25, 0, 0); // Use open-loop control for drive motors
+        .WithDriveRequestType(swerve::DriveRequestType::Velocity).WithHeadingPID(4, 0, 0); // Use open-loop control for drive motors
 
     /* Note: This must be constructed before the drivetrain, otherwise we need to
      *       define a destructor to un-register the telemetry from the drivetrain */

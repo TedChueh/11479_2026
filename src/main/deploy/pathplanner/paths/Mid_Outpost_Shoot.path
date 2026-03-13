@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6978890728476821,
-        "y": 0.6010513245033122
+        "x": 0.9655698492071698,
+        "y": 0.666554780819772
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.16428694618957,
-        "y": 1.4087903397355581
+        "x": 1.4319677225490577,
+        "y": 1.474293796052018
       },
       "isLocked": false,
       "linkedName": "MidOutpostStopPos"
@@ -33,9 +33,9 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 270.0,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false

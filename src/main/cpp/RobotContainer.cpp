@@ -16,7 +16,7 @@ using namespace pathplanner;
 
 RobotContainer::RobotContainer()
 { 
-    NamedCommands::registerCommand("Shooting", shooter.Shooting([this] { return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 4, 6.3, 6, 1).tps; }).WithTimeout(5.5_s));
+    NamedCommands::registerCommand("Shooting", shooter.Shooting([this] { return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 3, 6.2, 6.5, 1).tps; }).WithTimeout(4_s));
     NamedCommands::registerCommand("StopShooting", shooter.StopShooting().WithTimeout(0.1_s));
     EventTrigger("Intaking").WhileTrue(intake.Intaking([] { return 30_tps; }));
 
@@ -82,7 +82,7 @@ void RobotContainer::ConfigureBindings()
     joystick.RightTrigger().WhileTrue(
         shooter.Shooting([this] { 
             double targetDistance = (targetTranslation.Distance(drivetrain.GetState().Pose.Translation())).value();
-            double stationaryGain = ((targetDistance < (2_m).value())? 6.2 : 6.5) + gainOffset;
+            double stationaryGain = ((targetDistance < (2.5_m).value())? 6.2 : 6.5) + gainOffset;
             SmartDashboard::PutNumber("stationaryGain", stationaryGain);
             return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 3, stationaryGain, 6.5, 1).tps;
         })
@@ -108,13 +108,13 @@ void RobotContainer::ConfigureBindings()
 
     joystick.B().OnTrue(
         cmd::RunOnce([this] {
-            gainOffset += 0.5;
+            gainOffset += 0.25;
         })
     );
 
     joystick.A().OnTrue(
         cmd::RunOnce([this] {
-            gainOffset -= 0.5;
+            gainOffset -= 0.25;
         })
     );
 

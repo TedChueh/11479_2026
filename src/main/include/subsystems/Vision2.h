@@ -40,23 +40,23 @@ public:
         std::string limelightName = "limelight";
 
         // Hard reject thresholds
-        units::meter_t maxAcceptTagDistance = 6.5_m;
-        units::meter_t maxHardRejectTranslationError = 2.2_m;
-        units::degree_t maxHardRejectHeadingErrorSingleTag = 35_deg;
+        units::meter_t maxAcceptTagDistance = 5.5_m;
+        units::meter_t maxHardRejectTranslationError = 1.5_m;
+        units::degree_t maxHardRejectHeadingErrorSingleTag = 25_deg;
         units::meters_per_second_t maxRejectLinearSpeed = 5.0_mps;
-        units::degrees_per_second_t maxRejectAngularSpeed = 720_deg_per_s;
+        units::degrees_per_second_t maxRejectAngularSpeed = 360_deg_per_s;
 
         // Base XY trust
-        double baseXYStdDev = 0.07;
-        double minXYStdDev = 0.05;
-        double maxXYStdDev = 1.50;
+        double baseXYStdDev = 0.12;
+        double minXYStdDev = 0.08;
+        double maxXYStdDev = 2.0;
 
         // Distance / tag-count trust shaping
         double distanceScalar = 0.020;
-        double oneTagPenalty = 0.10;
-        double twoTagPenalty = 0.03;
-        double farSingleTagPenalty = 0.05;
-        units::meter_t farSingleTagDistance = 4.5_m;
+        double oneTagPenalty = 0.18;
+        double twoTagPenalty = 0.06;
+        double farSingleTagPenalty = 0.10;
+        units::meter_t farSingleTagDistance = 4.0_m;
 
         // Motion trust shaping
         double linearSpeedScalar = 0.025;
@@ -65,32 +65,32 @@ public:
         // Translation disagreement shaping
         units::meter_t mediumTranslationError = 0.45_m;
         units::meter_t largeTranslationError = 0.90_m;
-        double mediumTranslationPenalty = 0.08;
-        double largeTranslationPenalty = 0.18;
+        double mediumTranslationPenalty = 0.12;
+        double largeTranslationPenalty = 0.28;
 
         // Heading disagreement shaping
         units::degree_t mediumHeadingError = 10_deg;
         units::degree_t largeHeadingError = 20_deg;
         double headingErrorScalar = 0.002;
-        double mediumHeadingPenalty = 0.04;
-        double largeHeadingPenalty = 0.10;
+        double mediumHeadingPenalty = 0.06;
+        double largeHeadingPenalty = 0.16;
 
         // Rotation trust
         double defaultRotStdDev = 999999.0;   // almost ignore rotation by default
-        double closeMultiTagRotStdDev = 0.30; // only trust a bit in strong conditions
+        double closeMultiTagRotStdDev = 999999.0; 
         units::meter_t rotTrustMaxTagDistance = 2.5_m;
         units::degrees_per_second_t rotTrustMaxAngularSpeed = 120_deg_per_s;
         units::degree_t rotTrustMaxHeadingError = 10_deg;
 
         // Seed suggestion
-        units::meter_t seedMinTranslationError = 0.8_m;
-        units::meters_per_second_t seedMaxLinearSpeed = 0.10_mps;
-        units::degrees_per_second_t seedMaxAngularSpeed = 25_deg_per_s;
+        units::meter_t seedMinTranslationError = 1.2_m;
+        units::meters_per_second_t seedMaxLinearSpeed = 0.05_mps;
+        units::degrees_per_second_t seedMaxAngularSpeed = 15_deg_per_s;
         int seedMinTagCount = 2;
-        int seedStableFramesRequired = 3;
-        units::meter_t seedConsistencyTolerance = 0.20_m;
-        units::degree_t seedHeadingTolerance = 12_deg;
-        units::degree_t seedMaxHeadingError = 20_deg;
+        int seedStableFramesRequired = 4;
+        units::meter_t seedConsistencyTolerance = 0.15_m;
+        units::degree_t seedHeadingTolerance = 8_deg;
+        units::degree_t seedMaxHeadingError = 12_deg;
         units::second_t seedCooldown = 1.0_s;
     };
 
@@ -112,7 +112,8 @@ public:
     void Update(
         const frc::Pose2d& robotPose,
         units::meters_per_second_t translationSpeed,
-        units::degrees_per_second_t angularVelocity
+        units::degrees_per_second_t angularVelocity,
+        bool isAuto
     );
 
     std::optional<VisionUpdate> GetLatestUpdate() const;

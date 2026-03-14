@@ -18,7 +18,7 @@ RobotContainer::RobotContainer()
 { 
     NamedCommands::registerCommand("Shooting", shooter.Shooting([this] { return calcShootComp(61.32_deg, 1.27935_m, targetTranslation, drivetrain.GetState(), 0.050585_m, 3, 6.5, 6.5, 1).tps; }).WithTimeout(4_s));
     NamedCommands::registerCommand("StopShooting", shooter.StopShooting().WithTimeout(0.1_s));
-    EventTrigger("Intaking").WhileTrue(intake.Intaking([] { return 30_tps; }));
+    EventTrigger("Intaking").WhileTrue(intake.Intaking([] { return 50_tps; }));
 
     autoChooser = pathplanner::AutoBuilder::buildAutoChooser();
     SmartDashboard::PutData("Auto Mode", &autoChooser);
@@ -90,13 +90,13 @@ void RobotContainer::ConfigureBindings()
 
    joystick.RightBumper().WhileTrue(
         shooter.Shooting([] { 
-            return 60_tps; 
+            return 80_tps; 
         })
     );
 
     joystick.LeftTrigger().ToggleOnTrue(
         intake.Intaking([] { 
-            return 30_tps; 
+            return 50_tps; 
         })
     );
 

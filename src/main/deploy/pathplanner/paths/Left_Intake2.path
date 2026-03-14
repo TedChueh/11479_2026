@@ -36,12 +36,12 @@
         "y": 5.457947019867549
       },
       "prevControl": {
-        "x": 7.673138727444022,
-        "y": 6.975034350564659
+        "x": 7.691287914260332,
+        "y": 6.975291678782759
       },
       "nextControl": {
-        "x": 7.7400248344370866,
-        "y": 3.6574834437086086
+        "x": 7.7182450331125825,
+        "y": 3.6865231788079464
       },
       "isLocked": false,
       "linkedName": "LeftIntake2StopPos"
@@ -71,7 +71,7 @@
     },
     {
       "waypointRelativePos": 1.8813559322034177,
-      "rotationDegrees": -90.0
+      "rotationDegrees": -100.0
     }
   ],
   "constraintZones": [
@@ -108,13 +108,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -43.152389734005304
+    "rotation": -42.223639201599504
   },
   "useDefaultConstraints": true
 }

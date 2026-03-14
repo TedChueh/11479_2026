@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6257939189189194,
-        "y": 0.5314442567567561
+        "x": 2.1426158940397353,
+        "y": 0.4050331125827824
       },
       "isLocked": false,
       "linkedName": "RightShootStopPos"
     },
     {
       "anchor": {
-        "x": 5.729023178807947,
-        "y": 0.6518708609271529
+        "x": 5.7653228476821194,
+        "y": 0.5865314569536428
       },
       "prevControl": {
-        "x": 2.314695945945946,
-        "y": 0.7092145270270256
+        "x": 2.3531539735099334,
+        "y": 0.5865314569536433
       },
       "nextControl": {
-        "x": 7.612049373515175,
-        "y": 0.620245413803242
+        "x": 7.648614598542663,
+        "y": 0.5865314569536428
       },
       "isLocked": false,
       "linkedName": null
@@ -71,7 +71,7 @@
     },
     {
       "waypointRelativePos": 1.826876513317212,
-      "rotationDegrees": 90.0
+      "rotationDegrees": 100.0
     }
   ],
   "constraintZones": [
@@ -108,7 +108,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,

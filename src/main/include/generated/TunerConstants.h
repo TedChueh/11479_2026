@@ -73,7 +73,7 @@ public:
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
     // static constexpr units::meters_per_second_t kSpeedAt12Volts = 5.12_mps;
-    static constexpr units::meters_per_second_t kSpeedAt12Volts = 2.9_mps;
+    static constexpr units::meters_per_second_t kSpeedAt12Volts = 3.4_mps;
 
 private:
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -142,7 +142,7 @@ private:
     static constexpr int kFrontRightDriveMotorId = 11;
     static constexpr int kFrontRightSteerMotorId = 12;
     static constexpr int kFrontRightEncoderId = 13;
-    static constexpr units::turn_t kFrontRightEncoderOffset = 0.103759765625_tr;
+    static constexpr units::turn_t kFrontRightEncoderOffset = 0.101806640625_tr;
     static constexpr bool kFrontRightSteerMotorInverted = false;
     static constexpr bool kFrontRightEncoderInverted = false;
 
@@ -153,7 +153,7 @@ private:
     static constexpr int kBackLeftDriveMotorId = 31;
     static constexpr int kBackLeftSteerMotorId = 32;
     static constexpr int kBackLeftEncoderId = 33;
-    static constexpr units::turn_t kBackLeftEncoderOffset = -0.017578125_tr;
+    static constexpr units::turn_t kBackLeftEncoderOffset = -0.01904296875_tr;
     static constexpr bool kBackLeftSteerMotorInverted = false;
     static constexpr bool kBackLeftEncoderInverted = false;
 
@@ -164,7 +164,7 @@ private:
     static constexpr int kBackRightDriveMotorId = 41;
     static constexpr int kBackRightSteerMotorId = 42;
     static constexpr int kBackRightEncoderId = 43;
-    static constexpr units::turn_t kBackRightEncoderOffset = 0.124267578125_tr;
+    static constexpr units::turn_t kBackRightEncoderOffset = 0.12841796875_tr;
     static constexpr bool kBackRightSteerMotorInverted = false;
     static constexpr bool kBackRightEncoderInverted = false;
 
